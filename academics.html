@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academics | Holy Rose English Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body style="background: #0b1a13; color: white;">
+
+    <nav class="navbar">
+        <div class="logo-container">
+    <img src="Gemini_Generated_Image_xybrtqxybrtqxybr-removebg-preview.png" alt="Holy Rose Logo" class="nav-logo">
+    <div class="school-name-wrapper">
+        <h1 class="main-title">HOLY ROSE ENGLISH ACADEMY</h1>
+        <p class="registration-text">REGISTERED UNDER ASSEB (ASSAM STATE SCHOOL EDUCATION BOARD)</p>
+        <p class="tagline-mini">U-Dise Code No:-18210802806, SILCHAR, ASSAM</p>
+    </div>
+</div>
+
+    <div class="menu-toggle" id="mobile-menu" style="display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001;">
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+    </div>
+
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="teachers.html">Teachers</a></li>
+            <li><a href="admission.html">Admissions & Payment</a></li>
+            <li><a href="download.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="login-btn"><a href="login.html">LOGIN</a></li>
+        </ul>
+    </nav>
+
+    <div class="menu-overlay" id="overlay"></div>
+
+    <section style="padding: 20px 10%; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(11,26,19,0.9)), url('school-building.jpg'); background-size: cover; border-bottom: 3px solid #d4af37;" class="about-hero">
+        <h1 style="color: #d4af37; font-size: 35px; letter-spacing: 1px;">ACADEMIC PROGRAMS</h1>
+        <p style="font-size: 18px; opacity: 0.9;">Registered under ASSEB Curriculum</p>
+    </section>
+
+    
+    <section style="padding: 60px 8%;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <div class="academic-card" style="background: #0e2219; padding: 30px; border-radius: 15px; border-left: 5px solid #d4af37;">
+                <i class="fas fa-child" style="font-size: 40px; color: #d4af37; margin-bottom: 15px;"></i>
+                <h3>Primary Education</h3>
+                <p style="font-size: 14px; color: #ccc; margin-top: 10px;">Classes: Nursery to Class V. We focus on building a strong foundation, developing language skills, and nurturing moral values in children.</p>
+            </div>
+
+            <div class="academic-card" style="background: #0e2219; padding: 30px; border-radius: 15px; border-left: 5px solid #d4af37;">
+                <i class="fas fa-book-reader" style="font-size: 40px; color: #d4af37; margin-bottom: 15px;"></i>
+                <h3>Middle School</h3>
+                <p style="font-size: 14px; color: #ccc; margin-top: 10px;">Classes: VI to VIII. As per the ASSEB curriculum, students are given a strong and thorough understanding of Science, Mathematics, and Social Studies.</p>
+            </div>
+
+            <div class="academic-card" style="background: #0e2219; padding: 30px; border-radius: 15px; border-left: 5px solid #d4af37;">
+                <i class="fas fa-graduation-cap" style="font-size: 40px; color: #d4af37; margin-bottom: 15px;"></i>
+                <h3>Secondary School</h3>
+                <p style="font-size: 14px; color: #ccc; margin-top: 10px;">Classes: IX & X. Special emphasis is placed on board examination preparation and career guidance.</p>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 60px; background: rgba(212, 175, 55, 0.05); padding: 40px; border-radius: 20px;">
+            <h2 style="color: #d4af37; text-align: center; margin-bottom: 30px;">Key Subjects Offered</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">English</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">Mathematics</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">General Science</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">Social Science</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">Bengali / Hindi</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">Computer Science</span>
+                <span style="background: #1a3328; padding: 10px 20px; border-radius: 50px; border: 1px solid #d4af37;">Information Technology</span>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    const menu = document.querySelector('#mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    menu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        // Mobile links ki styling ke liye CSS mein '.nav-links.active' hona zaroori hai
+    });
+</script>
+
+
+    <footer style="text-align: center; padding: 40px; opacity: 0.5;">
+        <a href="index.html" style="color: #d4af37; text-decoration: none;">← Return to Home</a>
+    </footer>
+
+    <footer style="text-align: center; padding: 30px; opacity: 0.6; font-size: 12px;">
+        © 2026 Holy Rose English Academy | Silchar, Assam
+    </footer>
+
+</body>
+</html>

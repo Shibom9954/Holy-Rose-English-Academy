@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads - Holy Rose English Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body style="background: #0b1a13; color: white;">
+
+    <nav class="navbar">
+        <div class="logo-container">
+    <img src="Gemini_Generated_Image_xybrtqxybrtqxybr-removebg-preview.png" alt="Holy Rose Logo" class="nav-logo">
+    <div class="school-name-wrapper">
+        <h1 class="main-title">HOLY ROSE ENGLISH ACADEMY</h1>
+        <p class="registration-text">REGISTERED UNDER ASSEB (ASSAM STATE SCHOOL EDUCATION BOARD)</p>
+        <p class="tagline-mini">U-Dise Code No:-18210802806, SILCHAR, ASSAM</p>
+    </div>
+</div>
+
+    <div class="menu-toggle" id="mobile-menu" style="display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001;">
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+    </div>
+
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="teachers.html">Teachers</a></li>
+            <li><a href="admission.html">Admissions & Payment</a></li>
+            <li><a href="download.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="login-btn"><a href="login.html">LOGIN</a></li>
+        </ul>
+    </nav>
+
+    <div class="menu-overlay" id="overlay"></div>
+    <section class="download-hero">
+        <h2 class="gold-text">Student Resources & Downloads</h2>
+        <p>Get all the important documents, syllabus, and forms here.</p>
+    </section>
+
+    <section class="download-section">
+        <div class="download-grid">
+            
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-file-pdf"></i></div>
+                <h3>Academic Syllabus</h3>
+                <p>New updated syllabus for Session 2026-27.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3>School Calendar</h3>
+                <p>Holiday list and upcoming event schedule.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-user-plus"></i></div>
+                <h3>Admission Form</h3>
+                <p>Offline registration form for new students.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-clock"></i></div>
+                <h3>Exam Routine</h3>
+                <p>Datesheet for Annual Examination 2026.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-book-open"></i></div>
+                <h3>School Prospectus</h3>
+                <p>Detailed information about school facilities.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+            <div class="download-card">
+                <div class="dl-icon"><i class="fas fa-file-contract"></i></div>
+                <h3>Model Question Papers</h3>
+                <p>Practice papers for Class 1 to Class 10.</p>
+                <a href="#" class="dl-btn">Download PDF</a>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="menu-overlay" id="overlay"></div>
+    <script>
+        const menu = document.querySelector('#mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        const overlay = document.querySelector('#overlay');
+
+        menu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+        overlay.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

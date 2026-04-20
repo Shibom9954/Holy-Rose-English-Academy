@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Holy Rose English Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body style="background: #0b1a13; color: white;">
+
+     <nav class="navbar">
+        <div class="logo-container">
+    <img src="Gemini_Generated_Image_xybrtqxybrtqxybr-removebg-preview.png" alt="Holy Rose Logo" class="nav-logo">
+    <div class="school-name-wrapper">
+        <h1 class="main-title">HOLY ROSE ENGLISH ACADEMY</h1>
+        <p class="registration-text">REGISTERED UNDER ASSEB (ASSAM STATE SCHOOL EDUCATION BOARD)</p>
+        <p class="tagline-mini">U-Dise Code No:-18210802806, SILCHAR, ASSAM</p>
+    </div>
+</div>
+
+    <div class="menu-toggle" id="mobile-menu" style="display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001;">
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+        <span style="width: 25px; height: 3px; background: #d4af37;"></span>
+    </div>
+
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="teachers.html">Teachers</a></li>
+            <li><a href="admission.html">Admissions & Payment</a></li>
+            <li><a href="download.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="login-btn"><a href="login.html">LOGIN</a></li>
+        </ul>
+    </nav>
+
+    <div class="menu-overlay" id="overlay"></div>
+
+    <section style="padding: 20px 10%; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(11,26,19,0.9)), url('school-building.jpg'); background-size: cover; border-bottom: 3px solid #d4af37;" class="about-hero">
+        <h1 style="color: #d4af37; font-size: 35px; letter-spacing: 1px;">OUR VISUAL JOURNEY</h1>
+        <p style="font-size: 18px; opacity: 0.9;">Capturnig Moments of Learning & Joy</p>
+    </section>
+
+    
+
+    <section style="padding: 40px 8%;">
+        
+       <div class="gallery-filters" style="text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+    <button class="filter-btn active" onclick="filterGallery('all')">ALL PHOTOS</button>
+    <button class="filter-btn" onclick="filterGallery('campus')">CAMPUS</button>
+    <button class="filter-btn" onclick="filterGallery('sports')">SPORTS</button>
+    <button class="filter-btn" onclick="filterGallery('events')">EVENTS</button>
+</div>
+
+<div class="gallery-grid" id="galleryGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+    
+    <div class="gallery-item campus">
+        <img src="campus1.jpg" alt="Campus">
+        <div class="img-caption">Main Building</div>
+    </div>
+    <div class="gallery-item campus">
+        <img src="campus2.jpg" alt="Library">
+        <div class="img-caption">Digital Library</div>
+    </div>
+
+    <div class="gallery-item sports">
+        <img src="sports1.jpg" alt="Sports">
+        <div class="img-caption">Annual Cricket Match</div>
+    </div>
+    <div class="gallery-item sports">
+        <img src="sports2.jpg" alt="Sports">
+        <div class="img-caption">Yoga Session</div>
+    </div>
+
+    <div class="gallery-item events">
+        <img src="event1.jpg" alt="Event">
+        <div class="img-caption">Republic Day 2026</div>
+    </div>
+    <div class="gallery-item events">
+        <img src="event2.jpg" alt="Event">  
+        
+        <div class="img-caption">Prize Distribution</div>
+    </div>
+
+    <div class="gallery-item events">
+        <img src="../Assets/IMG_20260126_075722924_AE.jpg" alt="Event">
+        <div class="img-caption">Scout and Guide </div>
+    </div>
+    
+    </div>
+    </section>
+
+    <footer style="text-align: center; padding: 40px; opacity: 0.6;">
+        <a href="index.html" style="color: #d4af37; text-decoration: none;">← Back to Home</a>
+    </footer>
+
+
+<script>function filterGallery(category) {
+    const items = document.querySelectorAll('.gallery-item');
+    const btns = document.querySelectorAll('.filter-btn');
+
+    // Button active class change
+    btns.forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase() === category.toLowerCase() || (category === 'all' && btn.innerText === 'ALL PHOTOS')) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Filtering logic
+    items.forEach(item => {
+        if (category === 'all' || item.classList.contains(category)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}</script>
+
+<script>
+    const menu = document.querySelector('#mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    menu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        // Mobile links ki styling ke liye CSS mein '.nav-links.active' hona zaroori hai
+    });
+</script>
+
+</body>
+</html>

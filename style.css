@@ -1,0 +1,572 @@
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #0b1a13; /* Dark Greenish Black background */
+    color: white;
+    overflow-x: hidden;
+}
+
+/* --- NAVBAR (Desktop & Mobile Base) --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    background: rgba(11, 26, 19, 0.95);
+    backdrop-filter: blur(15px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    height: 80px;
+    border-bottom: 1px solid #d4af37;
+}
+
+.logo-container { display: flex; align-items: center; gap: 12px; }
+.nav-logo { height: 60px; filter: drop-shadow(0 0 5px #d4af37); }
+.school-name-wrapper { display: flex; flex-direction: column; }
+.main-title { font-size: 22px; font-weight: 700; color: #d4af37; line-height: 1.1; }
+.registration-text { font-size: 9px; color: #fff; opacity: 0.8; margin-top: 3px; }
+
+/* --- NAVIGATION LINKS --- */
+.nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+.nav-links a { color: #d4af37; text-decoration: none; font-size: 13px; font-weight: 500; transition: 0.3s; }
+.nav-links a:hover { color: #fff; text-shadow: 0 0 10px #d4af37; }
+.login-btn a { background: #d4af37; color: #000 !important; padding: 7px 15px; border-radius: 5px; font-weight: 600; }
+
+/* --- HAMBURGER MENU ICON (Hidden on Desktop) --- */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 10005;
+}
+.bar { width: 25px; height: 3px; background: #d4af37; border-radius: 2px; transition: 0.4s; }
+
+/* --- HERO SECTION --- */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(11, 26, 19, 0.7), rgba(11, 26, 19, 0.8)), 
+                url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover; background-position: center;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.glow-text { font-size: 40px; color: #d4af37; text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+.explore-btn { margin-top: 25px; padding: 10px 30px; background: #d4af37; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; }
+
+/* Facilities Grid */
+.facilities { padding: 80px 8%; text-align: center; }
+.facility-grid { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
+
+.fac-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #d4af37;
+    padding: 30px; width: 250px; border-radius: 15px;
+    transition: 0.4s;
+}
+.fac-card:hover { background: #d4af37; color: #000; cursor: pointer; transform: translateY(-10px); }
+
+.icon-box { font-size: 40px; margin-bottom: 15px; }
+
+/* --- MOBILE RESPONSIVE FIXES --- */
+@media (max-width: 768px) {
+    /* Pure body se extra space hatane ke liye */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0; padding: 0;
+    }
+
+    /* Navbar adjust karega */
+    .navbar {
+        padding: 5px 15px;
+        height: 70px;
+        justify-content: space-between;
+    }
+    
+    .main-title {
+        font-size: 14px !important; /* School name mobile ke liye chota */
+        white-space: nowrap;
+    }
+    .registration-text {
+        font-size: 7px !important;
+        display: block;
+        width: 180px; /* Text wrap ho jayega */
+    }
+    .nav-logo {
+        height: 40px !important; /* Logo chota kiya */
+    }
+    
+    /* Hamburger Menu Button */
+    .menu-toggle {
+        display: flex !important;
+        margin-left: auto;
+    }
+
+    .nav-links {
+        position: fixed; right: -100%; top: 0;
+        width: 260px; height: 100vh;
+        background: #0e2219; flex-direction: column;
+        padding-top: 90px; transition: 0.4s ease-in-out;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+    }
+    .nav-links.active { right: 0; } /* Slide in menu */
+    
+    .glow-text { font-size: 26px; }
+    
+    /* Vision/Mission boxes column mein aayenge */
+    .container { flex-direction: column; padding: 20px !important; }
+}
+
+/* Overlay */
+.menu-overlay {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9998;
+}
+.menu-overlay.active { display: block; }
+
+
+
+/* About Section */
+.about-section { padding: 80px 8%; background: #0e2219; }
+.about-container { display: flex; align-items: center; gap: 50px; }
+.about-img img { width: 100%; border-radius: 20px; border: 2px solid #d4af37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+.gold-text { color: #d4af37; font-size: 35px; margin-bottom: 20px; }
+
+/* Teachers Section */
+.teachers-section { padding: 80px 8%; text-align: center; background: #0b1a13; }
+.teacher-grid { display: flex; justify-content: center; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+.teacher-card { 
+    background: rgba(255,255,255,0.05); border-radius: 15px; padding: 30px; 
+    border-bottom: 4px solid #d4af37; transition: 0.3s; width: 250px;
+}
+.teacher-card:hover { transform: scale(1.05); background: rgba(212, 175, 55, 0.1); }
+.teacher-card img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #d4af37; margin-bottom: 15px; }
+.teacher-card h3 { color: #fff; }
+.teacher-card span { color: #d4af37; font-size: 14px; }
+
+
+
+
+
+/* Logo aur Name Wrapper */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+.nav-logo {
+    height: 60px;
+}
+
+
+.school-name-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* School Name - Bada aur Glowing */
+.main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #d4af37;
+    letter-spacing: 1px;
+    line-height: 1;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+/* Registration Text - School Name ke niche */
+.registration-text {
+    font-size: 10px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    margin-top: 5px;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.tagline-mini {
+    font-size: 11px;
+    color: #d4af37;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+
+
+
+
+/* News Ticker Container */
+.news-ticker {
+    margin-top: 85px; 
+    background: #d4af37; 
+    height: 45px;
+    display: flex !important; /* Label aur News ko ek line mein laane ke liye */
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    z-index: 999;
+}
+
+/* LEFT SIDE: Latest News Label (Fix) */
+.ticker-title {
+    background: #ff0000;
+    color: white;
+    padding: 0 15px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    white-space: nowrap; /* Isse text line nahi todega */
+    z-index: 10;
+    flex-shrink: 0; /* Isse label chota nahi hoga */
+    animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0.8; }
+}
+
+/* RIGHT SIDE: Marquee (News waapas laane ke liye) */
+.news-ticker marquee {
+    width: 100%; /* Marquee ki width fix ki taaki news dikhe */
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    display: block; /* Force display */
+    line-height: 45px;
+}
+
+/* Title text fix */
+.main-title {
+    font-size: 24px; /* Size adjust kiya */
+    line-height: 1.2;
+}
+
+.registration-text {
+    font-size: 9px;
+    display: block;
+}
+
+.academic-card {
+    transition: 0.3s ease-in-out;
+}
+.academic-card:hover {
+    transform: translateY(-10px);
+    background: #143124 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.gallery-grid {
+    padding: 20px 0;
+}
+
+.filter-btn {
+    padding: 10px 25px;
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: #d4af37;
+    color: #000;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s;
+}
+
+.img-caption {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(11, 26, 19, 0.85);
+    padding: 10px;
+    text-align: center;
+    color: #d4af37;
+    font-size: 14px;
+}
+
+/* News Ticker Mobile Fix */
+    .news-ticker { margin-top: 75px; height: 38px; }
+
+    .ticker-title { 
+    background: #ff0000; /* Red color taaki turant nazar pade */
+    color: #fff; 
+    padding: 0 10px; 
+    font-size: 20px; /* Font bada kar diya */
+    font-weight: 800;
+    text-transform: uppercase;
+    border-right: 3px solid #000;
+    box-shadow: 5px 0 15px rgba(255, 0, 0, 0.4);
+    white-space: nowrap;
+}
+
+/* Ticker text ka font normal rahega */
+marquee {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+    /* Hero Section Text Fix */
+    .glow-text {
+        font-size: 22px !important;
+        padding: 0 10px;
+    }
+
+   /* Beech wala logo aur uske piche ka glow */
+.main-logo-big { 
+    height: 180px; /* Size thoda bada kiya */
+    margin-bottom: 20px; 
+    filter: drop-shadow(0 0 25px #d4af37); /* Strong Gold Glow waapas aaya */
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from { filter: drop-shadow(0 0 15px #d4af37); }
+    to { filter: drop-shadow(0 0 35px #d4af37); }
+}
+
+
+/* Mobile par extra space hatane ke liye height auto ki */
+@media (max-width: 768px) {
+    .hero {
+        height: auto !important; 
+        padding: 120px 0 60px 0; /* Navbar se niche gap dene ke liye */
+    }
+    .main-logo-big {
+        height: 140px; /* Mobile par itna kafi hai */
+    }
+}
+
+/* Mobile Fix: Phone par bhi side-by-side rahe */
+@media (max-width: 768px) {
+    .ticker-title {
+        font-size: 11px;
+        padding: 0 8px;
+    }
+    .news-ticker {
+        height: 35px;
+        margin-top: 70px;
+    }
+    .news-ticker marquee {
+        font-size: 13px;
+    }
+}
+
+
+/* --- DOWNLOAD PAGE STYLING --- */
+
+.download-hero {
+    margin-top: 100px;
+    padding: 60px 5%;
+    text-align: center;
+    background: linear-gradient(rgba(11, 26, 19, 0.8), rgba(11, 26, 19, 0.9)), url('hero-bg.jpg');
+    background-size: cover;
+}
+
+.download-hero p {
+    color: #ccc;
+    margin-top: 10px;
+}
+
+.download-section {
+    padding: 50px 8%;
+}
+
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.download-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #d4af37;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    transition: 0.4s ease;
+}
+
+.download-card:hover {
+    transform: translateY(-10px);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.dl-icon {
+    font-size: 45px;
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.download-card h3 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.download-card p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.dl-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #d4af37;
+    color: #000;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.dl-btn:hover {
+    background: #fff;
+    box-shadow: 0 0 15px #fff;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .download-hero { margin-top: 80px; padding: 40px 5%; }
+    .download-grid { grid-template-columns: 1fr; }
+}
+
+
+/* --- PAYMENT SECTION STYLING --- */
+.payment-section {
+    padding: 60px 8%;
+    background: #0b1a13;
+}
+
+.payment-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.payment-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.qr-card {
+    background: #fff; /* QR code hamesha white background pe accha dikhta hai */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    width: 300px;
+}
+
+.qr-img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.payment-details {
+    color: #000;
+    font-size: 14px;
+}
+
+.payment-instructions {
+    text-align: left;
+    flex: 1;
+    min-width: 300px;
+}
+
+.payment-instructions h3 {
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.payment-instructions ul {
+    list-style: none;
+    color: #ccc;
+}
+
+.payment-instructions li {
+    margin-bottom: 10px;
+}
+
+.payment-instructions i {
+    color: #d4af37;
+    margin-right: 10px;
+}
+
+.warning-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border-left: 4px solid #d4af37;
+    color: #fff;
+    font-size: 13px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .payment-wrapper {
+        flex-direction: column;
+    }
+}
+
+
+/* --- ABOUT PAGE STYLING --- */
+
+.about-hero {
+    margin-top: 100px;
+    padding: 60px 5%;
+    text-align: center;
+    background: linear-gradient(rgba(11, 26, 19, 0.8), rgba(11, 26, 19, 0.9)), url('hero-bg.jpg');
+    background-size: cover;
+}
+
+.about-hero p {
+    color: #ccc;
+    margin-top: 10px;
+}
+
+.about-section {
+    padding: 50px 8%;
+}
