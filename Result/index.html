@@ -104,161 +104,100 @@ table td:first-child{text-align:left;font-weight:600;}
 .signature-area{grid-template-columns:1fr;gap:40px}
 }
 
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 6mm;
+/* Perfect A4 Print Setting - Full Size & Spacing */
+@media print{
+  @page { 
+    size: A4 portrait; 
+    margin: 10mm; 
+  }
+  
+  body { 
+    background: #fff; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important; 
+  }
+  
+  .header, .action-buttons, .admin-btn, #searchSection { 
+    display: none !important; 
+  }
+  
+  .marksheet-container { 
+    display: block !important; 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    max-width: 100% !important; 
+  }
+  
+  .marksheet { 
+    border: 2px solid #000 !important; 
+    box-shadow: none !important; 
+    margin: 0 auto !important; 
+    width: 100% !important; 
+    /* Min-height ensures it stretches down the full A4 page */
+    min-height: 270mm !important; 
+    page-break-inside: avoid !important; 
+    border-radius: 0 !important; 
+    padding: 30px !important; 
+    position: relative;
+    z-index: 1;
   }
 
-  html, body {
-    background: #fff !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    width: 100% !important;
-    height: auto !important;
+  /* Watermark Fix - Visibility badhai hai */
+  .marksheet::before {
+    opacity: 0.08 !important; /* HREA text watermark thoda dark kiya */
+    z-index: 0 !important;
+  }
+  .marksheet::after {
+    opacity: 0.1 !important; /* Logo watermark thoda dark kiya */
+    z-index: 0 !important;
   }
 
-  .header,
-  .action-buttons,
-  .admin-btn,
-  #searchSection {
-    display: none !important;
+  /* Fonts & Table Spacing Wapas Bada Kiya */
+  .ms-header h1 { font-size: 24px !important; }
+  .ms-header p { font-size: 13px !important; }
+  
+  .student-info { 
+    font-size: 14px !important; 
+    padding: 15px !important; 
+    margin-bottom: 20px !important; 
   }
+  
+  table th { padding: 10px !important; font-size: 13px !important; }
+  table td { padding: 8px 10px !important; font-size: 14px !important; }
 
-  .marksheet-container {
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
+  /* Result Summary Boxes */
+  .result-summary { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    gap: 10px !important; 
+    margin-top: 20px !important;
   }
-
-  .marksheet {
-    border: 2px solid #000 !important;
-    box-shadow: none !important;
-    margin: 0 auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 12px 15px !important;
-    border-radius: 0 !important;
-    page-break-inside: avoid !important;
-    page-break-after: avoid !important;
-    page-break-before: avoid !important;
-    overflow: hidden !important;
-    transform: scale(0.92);
-    transform-origin: top center;
+  .summary-item { 
+    flex: 1 !important; 
+    padding: 15px 5px !important; 
   }
-
-  /* Header compact */
-  .ms-header {
-    padding-bottom: 6px !important;
-    margin-bottom: 8px !important;
+  
+  /* Signature Area - Lamba Space Diya Hai */
+  .signature-area { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    margin-top: 90px !important; /* Yahan 90px ka khulla space diya hai sign karne ke liye */
+    gap: 20px !important; 
   }
-  .ms-header img {
-    width: 55px !important;
-    margin-bottom: 4px !important;
-  }
-  .ms-header h1 {
-    font-size: 18px !important;
-    margin-bottom: 2px !important;
-  }
-  .ms-header p {
-    font-size: 10px !important;
-    line-height: 1.25 !important;
-  }
-  .ms-header h3 {
-    font-size: 13px !important;
-    padding: 5px !important;
-    margin-top: 6px !important;
-    letter-spacing: 1px !important;
-  }
-
-  /* Student info compact */
-  .student-info {
-    padding: 6px 10px !important;
-    margin-bottom: 8px !important;
-    gap: 4px 12px !important;
-  }
-  .info-row {
-    font-size: 11px !important;
-  }
-  .info-row strong {
-    min-width: 90px !important;
-  }
-
-  /* Table compact */
-  table {
-    margin-bottom: 8px !important;
-    font-size: 11px !important;
-  }
-  table th {
-    padding: 5px 4px !important;
-    font-size: 10px !important;
-  }
-  table td {
-    padding: 4px 5px !important;
-    font-size: 11px !important;
-  }
-  table td small,
-  table th small {
-    font-size: 9px !important;
-  }
-
-  /* Result summary boxes */
-  .result-summary {
-    display: flex !important;
-    justify-content: space-between !important;
-    gap: 6px !important;
-    margin-bottom: 10px !important;
-    page-break-inside: avoid !important;
-  }
-  .summary-item {
-    flex: 1 !important;
-    padding: 6px 3px !important;
-    border-radius: 5px !important;
-  }
-  .summary-item h4 {
-    font-size: 9px !important;
-    margin-bottom: 2px !important;
-  }
-  .summary-item p {
+  .sig-box { 
+    flex: 1 !important; 
+    max-width: 30% !important; 
+    text-align: center !important; 
+    border-top: 1px solid #000 !important; 
+    padding-top: 8px !important;
     font-size: 14px !important;
   }
 
-  /* Signatures - ek line mein */
-  .signature-area {
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-top: 18px !important;
-    gap: 10px !important;
-    page-break-inside: avoid !important;
-  }
-  .sig-box {
-    flex: 1 !important;
-    max-width: 32% !important;
-    font-size: 11px !important;
-    padding-top: 3px !important;
-    border-top: 1px solid #333 !important;
-  }
-
-  /* Note */
-  .nb-note {
-    margin-top: 12px !important;
-    padding: 6px 8px !important;
-    font-size: 10px !important;
-  }
-
-  /* Watermark halka rakho print mein */
-  .marksheet::before {
-    opacity: 0.04 !important;
-    font-size: 12px !important;
-  }
-  .marksheet::after {
-    opacity: 0.05 !important;
-    width: 280px !important;
-    height: 280px !important;
+  .nb-note { 
+    margin-top: 30px !important; 
+    font-size: 12px !important; 
   }
 }
 </style>
