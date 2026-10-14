@@ -270,18 +270,29 @@ function showResult(){
         <td style="font-weight:bold">${isSubjectFail?'Fail':'Pass'}</td>
       </tr>`;
       total += parseInt(sub.fullMarks); obtained += totVal;
-    } 
-    else {
+       } else {
+      // Dynamic Max and Pass marks based on Subject Type
+      let thMax = 80, prMax = 20, thPass = 24, prPass = 6;
+      
+      if(sub.type === 'elective_70_30'){
+        thMax = 70; prMax = 30; thPass = 21; prPass = 9; // 30% of each
+      } else if(sub.type === 'elective_50_50'){
+        thMax = 50; prMax = 50; thPass = 15; prPass = 15; // 30% of each
+      }
+
       let thDisplay = thStr === 'AB' ? 'AB' : thVal;
       let prDisplay = prStr === 'AB' ? 'AB' : prVal;
       let actualTotDisplay = (thStr === 'AB' && prStr === 'AB') ? 'AB' : (thVal + prVal);
       
-      if(thStr === 'AB' || prStr === 'AB' || thVal < 24 || prVal < 6 || (thVal + prVal) < 30) isSubjectFail = true;
+      // Fail Condition: Absent OR Theory Fail OR Practical Fail OR Total Fail
+      if(thStr === 'AB' || prStr === 'AB' || thVal < thPass || prVal < prPass || (thVal + prVal) < 30) {
+          isSubjectFail = true;
+      }
 
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
         <td>${sub.name}</td>
-        <td>100 <small style="font-size:11px">(80+20)</small></td>
-        <td>30 <small style="font-size:11px">(24+6)</small></td>
+        <td>100 <small style="font-size:11px">(${thMax}+${prMax})</small></td>
+        <td>30 <small style="font-size:11px">(${thPass}+${prPass})</small></td>
         <td>${thDisplay}</td>
         <td>${prDisplay}</td>
         <td><b>${actualTotDisplay}</b></td>
