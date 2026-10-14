@@ -227,11 +227,19 @@ function showResult(){
   if(!student){err.innerHTML='❌ No student found with this Roll Number!';err.style.display='block';return;}
   
   const key = `${cName}_${sec}_${roll}`;
-  const studentMarks = (data.marks||{})[key];
+  const cleanKeyName = key.replace(/[\.#\$\[\]]/g, '_');
+  const studentMarks = (data.marks||{})[key] || (data.marks||{})[cleanKeyName];
   if(!studentMarks){err.innerHTML='❌ Marks have not been entered for this student yet!';err.style.display='block';return;}
   
   const cls = data.classes.find(c=>c.name===cName);
   let total=0, obtained=0;
+
+  // Safe number converter (AB / blank / galat value = 0)
+  function toNum(v){
+    if(v === 'AB' || v === '') return 0;
+    const n = parseFloat(v);
+    return isNaN(n) ? 0 : n;
+  }
   
   let rows = `<tr>
     <th>Subjects</th>
@@ -244,47 +252,57 @@ function showResult(){
   </tr>`;
 
   (cls.subjects||[]).forEach(sub=>{
-    let m = studentMarks[sub.name];
-    if(!m) return;
+    // Subject ke marks dhoondho (normal naam ya Firebase-safe naam se)
+    const safeSubName = sub.name.replace(/[\.#\$\[\]]/g, '_');
+    let m = studentMarks[sub.name] || studentMarks[safeSubName];
+    if(!m || typeof m !== 'object') return;
     
-    let thStr = String(m.th || '').trim().toUpperCase();
-    let prStr = String(m.pr || '').trim().toUpperCase();
-    let totStr = String(m.tot || '').trim().toUpperCase();
+    let thStr = String(m.th ?? '').trim().toUpperCase();
+    let prStr = String(m.pr ?? '').trim().toUpperCase();
+    let totStr = String(m.tot ?? '').trim().toUpperCase();
+
+    const isSingle = (sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single');
+
+    // ★★★ BLANK SUBJECT SKIP (MIL1 / MIL2 fix) ★★★
+    if(isSingle){
+      if(totStr === '') return;
+    } else {
+      if(thStr === '' && prStr === '') return;
+    }
     
-    let thVal = thStr === 'AB' ? 0 : parseFloat(thStr || 0);
-    let prVal = prStr === 'AB' ? 0 : parseFloat(prStr || 0);
-    let totVal = totStr === 'AB' ? 0 : parseFloat(totStr || 0);
+    let thVal = toNum(thStr);
+    let prVal = toNum(prStr);
+    let totVal = toNum(totStr);
 
     let isSubjectFail = false;
     
-    if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
+    if(isSingle) {
+      const fullM = toNum(String(sub.fullMarks));
+      const passM = toNum(String(sub.passMarks));
       let actualTotDisplay = totStr === 'AB' ? 'AB' : totVal;
-      if(totVal < sub.passMarks || totStr === 'AB') isSubjectFail = true;
+      if(totStr === 'AB' || totVal < passM) isSubjectFail = true;
       
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
         <td>${sub.name}</td>
-        <td>${sub.fullMarks}</td>
-        <td>${sub.passMarks}</td>
+        <td>${fullM}</td>
+        <td>${passM}</td>
         <td>-</td><td>-</td>
         <td><b>${actualTotDisplay}</b></td>
         <td style="font-weight:bold">${isSubjectFail?'Fail':'Pass'}</td>
       </tr>`;
-      total += parseInt(sub.fullMarks); obtained += totVal;
-       } else {
-      // Dynamic Max and Pass marks based on Subject Type
+      total += fullM; obtained += totVal;
+    } else {
       let thMax = 80, prMax = 20, thPass = 24, prPass = 6;
-      
       if(sub.type === 'elective_70_30'){
-        thMax = 70; prMax = 30; thPass = 21; prPass = 9; // 30% of each
+        thMax = 70; prMax = 30; thPass = 21; prPass = 9;
       } else if(sub.type === 'elective_50_50'){
-        thMax = 50; prMax = 50; thPass = 15; prPass = 15; // 30% of each
+        thMax = 50; prMax = 50; thPass = 15; prPass = 15;
       }
 
       let thDisplay = thStr === 'AB' ? 'AB' : thVal;
       let prDisplay = prStr === 'AB' ? 'AB' : prVal;
       let actualTotDisplay = (thStr === 'AB' && prStr === 'AB') ? 'AB' : (thVal + prVal);
       
-      // Fail Condition: Absent OR Theory Fail OR Practical Fail OR Total Fail
       if(thStr === 'AB' || prStr === 'AB' || thVal < thPass || prVal < prPass || (thVal + prVal) < 30) {
           isSubjectFail = true;
       }
@@ -302,8 +320,9 @@ function showResult(){
     }
   });
   
-  const percent = total > 0 ? ((obtained / total) * 100).toFixed(1) : 0;
-  const grade = getGrade(percent);
+  obtained = Math.round(obtained * 100) / 100;
+  const percent = total > 0 ? ((obtained / total) * 100).toFixed(1) : '0.0';
+  const grade = getGrade(parseFloat(percent));
   
   const isOverallPass = parseFloat(percent) >= 30;
   const finalStatus = isOverallPass ? 'PASS' : 'FAIL';
