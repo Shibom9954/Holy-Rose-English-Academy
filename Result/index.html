@@ -104,100 +104,185 @@ table td:first-child{text-align:left;font-weight:600;}
 .signature-area{grid-template-columns:1fr;gap:40px}
 }
 
-/* Perfect A4 Print Setting - Full Size & Spacing */
-@media print{
-  @page { 
-    size: A4 portrait; 
-    margin: 10mm; 
-  }
-  
-  body { 
-    background: #fff; 
-    margin: 0; 
-    padding: 0; 
-    -webkit-print-color-adjust: exact !important; 
-    print-color-adjust: exact !important; 
-  }
-  
-  .header, .action-buttons, .admin-btn, #searchSection { 
-    display: none !important; 
-  }
-  
-  .marksheet-container { 
-    display: block !important; 
-    margin: 0 !important; 
-    padding: 0 !important; 
-    max-width: 100% !important; 
-  }
-  
-  .marksheet { 
-    border: 2px solid #000 !important; 
-    box-shadow: none !important; 
-    margin: 0 auto !important; 
-    width: 100% !important; 
-    /* Min-height ensures it stretches down the full A4 page */
-    min-height: 270mm !important; 
-    page-break-inside: avoid !important; 
-    border-radius: 0 !important; 
-    padding: 30px !important; 
-    position: relative;
-    z-index: 1;
+/* ========== PERFECT A4 PRINT - Exactly like your old website ========== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 
-  /* Watermark Fix - Visibility badhai hai */
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .header,
+  .action-buttons,
+  .admin-btn,
+  #searchSection {
+    display: none !important;
+  }
+
+  .marksheet-container {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .marksheet {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 25px 30px !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: white !important;
+  }
+
+  /* ===== WATERMARK (Strong & Clear) ===== */
   .marksheet::before {
-    opacity: 0.08 !important; /* HREA text watermark thoda dark kiya */
+    content: "HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA" !important;
+    position: absolute !important;
+    top: -50% !important;
+    left: -50% !important;
+    width: 200% !important;
+    height: 200% !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: rgba(15, 81, 50, 0.08) !important;
+    line-height: 3.5 !important;
+    letter-spacing: 6px !important;
+    text-align: center !important;
+    transform: rotate(-32deg) !important;
+    pointer-events: none !important;
     z-index: 0 !important;
+    opacity: 1 !important;
   }
+
   .marksheet::after {
-    opacity: 0.1 !important; /* Logo watermark thoda dark kiya */
+    content: "" !important;
+    position: absolute !important;
+    top: 48% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 420px !important;
+    height: 420px !important;
+    background: url('logo.png') no-repeat center center !important;
+    background-size: contain !important;
+    opacity: 0.09 !important;
     z-index: 0 !important;
+    pointer-events: none !important;
   }
 
-  /* Fonts & Table Spacing Wapas Bada Kiya */
-  .ms-header h1 { font-size: 24px !important; }
-  .ms-header p { font-size: 13px !important; }
-  
-  .student-info { 
-    font-size: 14px !important; 
-    padding: 15px !important; 
-    margin-bottom: 20px !important; 
+  /* Content upar rahe */
+  .ms-header,
+  .student-info,
+  table,
+  .result-summary,
+  .signature-area,
+  .nb-note {
+    position: relative !important;
+    z-index: 2 !important;
   }
-  
-  table th { padding: 10px !important; font-size: 13px !important; }
-  table td { padding: 8px 10px !important; font-size: 14px !important; }
 
-  /* Result Summary Boxes */
-  .result-summary { 
-    display: flex !important; 
-    justify-content: space-between !important; 
-    gap: 10px !important; 
-    margin-top: 20px !important;
+  /* Header */
+  .ms-header {
+    text-align: center !important;
+    margin-bottom: 15px !important;
+    padding-bottom: 10px !important;
   }
-  .summary-item { 
-    flex: 1 !important; 
-    padding: 15px 5px !important; 
+  .ms-header img {
+    width: 75px !important;
+    margin-bottom: 8px !important;
   }
-  
-  /* Signature Area - Lamba Space Diya Hai */
-  .signature-area { 
-    display: flex !important; 
-    justify-content: space-between !important; 
-    margin-top: 90px !important; /* Yahan 90px ka khulla space diya hai sign karne ke liye */
-    gap: 20px !important; 
+  .ms-header h1 {
+    font-size: 24px !important;
+    margin-bottom: 4px !important;
   }
-  .sig-box { 
-    flex: 1 !important; 
-    max-width: 30% !important; 
-    text-align: center !important; 
-    border-top: 1px solid #000 !important; 
+  .ms-header p {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+  .ms-header h3 {
+    font-size: 15px !important;
+    padding: 7px 12px !important;
+    margin-top: 10px !important;
+  }
+
+  /* Student Info */
+  .student-info {
+    padding: 12px 15px !important;
+    margin-bottom: 15px !important;
+    font-size: 13.5px !important;
+  }
+
+  /* Table */
+  table {
+    width: 100% !important;
+    margin-bottom: 15px !important;
+    border-collapse: collapse !important;
+  }
+  table th {
+    padding: 9px 6px !important;
+    font-size: 12px !important;
+  }
+  table td {
+    padding: 8px 6px !important;
+    font-size: 13px !important;
+  }
+
+  /* Result Summary */
+  .result-summary {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin: 15px 0 10px 0 !important;
+  }
+  .summary-item {
+    flex: 1 !important;
+    padding: 12px 5px !important;
+  }
+  .summary-item h4 {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+  .summary-item p {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+  }
+
+  /* Signature Area - Perfect space like your old site */
+  .signature-area {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 50px !important;
+    gap: 20px !important;
+  }
+  .sig-box {
+    flex: 1 !important;
+    max-width: 30% !important;
+    text-align: center !important;
+    border-top: 1.5px solid #333 !important;
     padding-top: 8px !important;
     font-size: 14px !important;
+    font-weight: bold !important;
   }
 
-  .nb-note { 
-    margin-top: 30px !important; 
-    font-size: 12px !important; 
+  .nb-note {
+    margin-top: 25px !important;
+    padding: 10px !important;
+    font-size: 12px !important;
   }
 }
 </style>
