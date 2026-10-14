@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - Holy Rose English Academy</title>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:#f0f2f5;color:#333}
@@ -99,7 +102,7 @@ table tr:hover{background:#f8f9fa}
 <div class="sidebar-header">
 <img src="logo.png" alt="Logo">
 <h3>Holy Rose Academy</h3>
-<p>Admin Dashboard</p>
+<p>Admin Dashboard (Cloud Live)</p>
 </div>
 <div class="nav-item active" onclick="showSection('dashboard',this)">📊 Dashboard</div>
 <div class="nav-item" onclick="showSection('classes',this)">🏫 Classes & Sections</div>
@@ -131,11 +134,7 @@ table tr:hover{background:#f8f9fa}
 <div class="stat-card"><h4>Results Entered</h4><p id="statResults">0</p></div>
 </div>
 <div class="alert alert-info">
-<b>📘 Quick Guide:</b><br>
-👉 Type <b>AB</b> in any marks box if the student was Absent.<br>
-👉 <b>Elective (Single)</b> = bilkul MIL jaisa (sirf Total marks)<br>
-👉 <b>Elective (Th + Pr)</b> = Theory + Practical wala<br>
-👉 Nursery/KG ke liye "Nursery/KG (Single Subject)" use karo.
+<b>☁️ Google Firebase Connected!</b><br>
 </div>
 </div>
 
@@ -223,12 +222,39 @@ table tr:hover{background:#f8f9fa}
 </div>
 
 <script>
+// Firebase Config Setup
+const firebaseConfig = {
+  apiKey: "AIzaSyBmALqMUSWyD2fnDX5hkaelB_dO-iR22Os",
+  authDomain: "hrea-result.firebaseapp.com",
+  databaseURL: "https://hrea-result-default-rtdb.firebaseio.com",
+  projectId: "hrea-result",
+  storageBucket: "hrea-result.firebasestorage.app",
+  messagingSenderId: "587879050700",
+  appId: "1:587879050700:web:5d3bc81173d5eafa450169",
+  measurementId: "G-RNY1K8BXXT"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 let defaultData = { classes: [], students: [], marks: {}, settings: { resultsPublished: false } };
 let data = JSON.parse(localStorage.getItem('schoolData')) || defaultData;
 if(!data.settings) data.settings = { resultsPublished: false };
 let adminPass = localStorage.getItem('adminPass') || 'HREA@2008';
 
-function save(){localStorage.setItem('schoolData',JSON.stringify(data));}
+// Firebase Live Sync
+db.ref('schoolData').on('value', (snapshot) => {
+    const cloudData = snapshot.val();
+    if(cloudData) {
+        data = cloudData;
+        localStorage.setItem('schoolData', JSON.stringify(data));
+        refreshAll();
+    }
+});
+
+function save(){
+    localStorage.setItem('schoolData',JSON.stringify(data));
+    db.ref('schoolData').set(data);
+}
 
 function login(){
   const p = document.getElementById('passwordInput').value;
@@ -264,13 +290,13 @@ function refreshAll(){
 }
 
 function updateStats(){
-  document.getElementById('statClasses').textContent=data.classes.length;
-  document.getElementById('statStudents').textContent=data.students.length;
-  document.getElementById('statResults').textContent=Object.keys(data.marks).length;
+  document.getElementById('statClasses').textContent=data.classes?data.classes.length:0;
+  document.getElementById('statStudents').textContent=data.students?data.students.length:0;
+  document.getElementById('statResults').textContent=data.marks?Object.keys(data.marks).length:0;
 }
 
 function updatePublishUI() {
-  const isPub = data.settings.resultsPublished;
+  const isPub = data.settings && data.settings.resultsPublished;
   const statusText = document.getElementById('pubStatusText');
   const btn = document.getElementById('pubBtn');
   const card = document.querySelector('.publish-card');
@@ -286,15 +312,17 @@ function updatePublishUI() {
 }
 
 function togglePublish() {
+  if(!data.settings) data.settings = {};
   data.settings.resultsPublished = !data.settings.resultsPublished;
   save(); updatePublishUI();
-  if(data.settings.resultsPublished) alert('✅ Results PUBLISHED!'); else alert('🚫 Results HIDDEN!');
+  if(data.settings.resultsPublished) alert('✅ Results PUBLISHED to Cloud!'); else alert('🚫 Results HIDDEN!');
 }
 
 function addClass(){
   const name=document.getElementById('newClassName').value.trim();
   const secs=document.getElementById('newClassSections').value.trim();
   if(!name||!secs)return alert('Fill both fields!');
+  if(!data.classes) data.classes = [];
   if(data.classes.find(c=>c.name===name))return alert('Class already exists!');
   data.classes.push({name,sections:secs.split(',').map(s=>s.trim()),subjects:[]});
   save();loadClassesTable();loadClassDropdowns();
@@ -304,16 +332,16 @@ function addClass(){
 function deleteClass(name){
   if(!confirm('Delete this class and all its data?'))return;
   data.classes=data.classes.filter(c=>c.name!==name);
-  data.students=data.students.filter(s=>s.class!==name);
+  if(data.students) data.students=data.students.filter(s=>s.class!==name);
   save();refreshAll();
 }
 function loadClassesTable(){
   const tb=document.getElementById('classesTable');
-  tb.innerHTML=data.classes.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.sections.join(', ')}</td><td>${c.subjects.length} subjects</td><td><button class="btn btn-danger btn-sm" onclick="deleteClass('${c.name}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#999">No classes added yet</td></tr>';
+  tb.innerHTML=(data.classes||[]).map(c=>`<tr><td><b>${c.name}</b></td><td>${c.sections.join(', ')}</td><td>${(c.subjects||[]).length} subjects</td><td><button class="btn btn-danger btn-sm" onclick="deleteClass('${c.name}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#999">No classes added yet</td></tr>';
 }
 
 function loadClassDropdowns(){
-  const opts='<option value="">-- Select Class --</option>'+data.classes.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  const opts='<option value="">-- Select Class --</option>'+(data.classes||[]).map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
   ['subClassSel','stuClass','filterClass','markClass'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.innerHTML=opts;
   });
@@ -326,7 +354,7 @@ function loadSubjects(){
   panel.style.display='block';
   const cls=data.classes.find(c=>c.name===cName);
   const list=document.getElementById('subjectsList');
-  list.innerHTML=cls.subjects.map((s,i)=>`
+  list.innerHTML=(cls.subjects||[]).map((s,i)=>`
   <div class="subject-row">
     <div><b>${s.name}</b> 
       ${s.type==='mil'?'<span class="badge badge-mil">MIL</span>':
@@ -346,6 +374,7 @@ function addSubject(){
   const type=document.getElementById('newSubType').value;
   if(!name||!full||!pass)return alert('Fill all fields!');
   const cls=data.classes.find(c=>c.name===cName);
+  if(!cls.subjects) cls.subjects = [];
   cls.subjects.push({name,fullMarks:+full,passMarks:+pass,type});
   save();loadSubjects();
   document.getElementById('newSubName').value='';
@@ -375,6 +404,7 @@ function addStudent(){
   const name=document.getElementById('stuName').value.trim();
   const father=document.getElementById('stuFather').value.trim();
   if(!cls||!sec||!roll||!name)return alert('Fill required fields!');
+  if(!data.students) data.students = [];
   if(data.students.find(s=>s.class===cls&&s.section===sec&&s.roll.toString()===roll))return alert('Roll already exists in this section!');
   data.students.push({class:cls,section:sec,roll,name,father});
   save();loadStudents();
@@ -383,20 +413,13 @@ function addStudent(){
 function deleteStudent(i){
   if(!confirm('Delete this student?'))return;
   const s=data.students[i];
-  delete data.marks[`${s.class}_${s.section}_${s.roll}`];
+  if(data.marks) delete data.marks[`${s.class}_${s.section}_${s.roll}`];
   data.students.splice(i,1);save();loadStudents();
 }
 function loadStudents(){
   const fc=document.getElementById('filterClass')?.value||'';
   const fs=document.getElementById('filterSection')?.value||'';
-  const fcls=data.classes.find(c=>c.name===fc);
-  const fSel=document.getElementById('filterSection');
-  if(fSel){
-    const current=fSel.value;
-    fSel.innerHTML='<option value="">All Sections</option>';
-    if(fcls)fcls.sections.forEach(s=>fSel.innerHTML+=`<option ${s===current?'selected':''}>${s}</option>`);
-  }
-  const list=data.students.filter(s=>(!fc||s.class===fc)&&(!fs||s.section===fs));
+  const list=(data.students||[]).filter(s=>(!fc||s.class===fc)&&(!fs||s.section===fs));
   const tb=document.getElementById('studentsTable');
   tb.innerHTML=list.map((s)=>{
     const realI=data.students.indexOf(s);
@@ -418,7 +441,7 @@ function loadMarkStudents(){
   const s=document.getElementById('markSection').value;
   const sel=document.getElementById('markStudent');
   sel.innerHTML='<option value="">-- Student --</option>';
-  data.students.filter(st=>st.class===c&&st.section===s).forEach(st=>sel.innerHTML+=`<option value="${st.roll}">${st.roll} - ${st.name}</option>`);
+  (data.students||[]).filter(st=>st.class===c&&st.section===s).forEach(st=>sel.innerHTML+=`<option value="${st.roll}">${st.roll} - ${st.name}</option>`);
   document.getElementById('marksForm').innerHTML='';
 }
 function loadMarkForm(){
@@ -428,10 +451,10 @@ function loadMarkForm(){
   if(!c||!s||!r){document.getElementById('marksForm').innerHTML='';return;}
   const cls=data.classes.find(cl=>cl.name===c);
   const key=`${c}_${s}_${r}`;
-  const existing=data.marks[key]||{};
+  const existing=(data.marks||{})[key]||{};
   
   let html='<table style="background:#fff; border:1px solid #ddd"><thead><tr><th>Subject</th><th>Type</th><th>Theory Mark</th><th>Practical/Assig Mark</th></tr></thead><tbody>';
-  cls.subjects.forEach(sub=>{
+  (cls.subjects||[]).forEach(sub=>{
     let val = existing[sub.name] || {};
     if(typeof val !== 'object') val = {tot: val}; 
     
@@ -454,7 +477,7 @@ function loadMarkForm(){
   let coVal = existing.coCurricular || '';
   html+=`<tr style="background:#f8f9fa"><td colspan="2"><b style="color:#0f5132">⭐ Co-curricular Grade</b></td><td colspan="2"><input type="text" id="mark_co" value="${coVal}" placeholder="e.g. A, B, A+" style="width:100%;padding:8px;border:2px solid #0f5132;border-radius:4px"></td></tr>`;
   
-  html+='</tbody></table><br><button class="btn" onclick="saveMarks()">💾 Save Marks</button>';
+  html+='</tbody></table><br><button class="btn" onclick="saveMarks()">💾 Save Marks to Cloud</button>';
   document.getElementById('marksForm').innerHTML=html;
 }
 function saveMarks(){
@@ -465,7 +488,7 @@ function saveMarks(){
   const key=`${c}_${s}_${r}`;
   const marks={};
   
-  cls.subjects.forEach(sub=>{
+  (cls.subjects||[]).forEach(sub=>{
     if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
       marks[sub.name] = { tot: document.getElementById(`mark_${sub.name}_tot`).value };
     } else {
@@ -476,8 +499,9 @@ function saveMarks(){
     }
   });
   marks.coCurricular = document.getElementById('mark_co').value;
+  if(!data.marks) data.marks = {};
   data.marks[key]=marks;
-  save();alert('✅ Marks saved successfully!');updateStats();
+  save();alert('☁️ Marks Saved & Synced to Google Cloud!');updateStats();
 }
 
 function changePass(){
@@ -499,7 +523,7 @@ function importData(e){
       const importedData = JSON.parse(ev.target.result);
       if(!importedData.settings) importedData.settings = { resultsPublished: false };
       data = importedData;
-      save(); refreshAll(); alert('✅ Data imported successfully!');
+      save(); refreshAll(); alert('✅ Data imported & Synced to Cloud!');
     }catch(err){ alert('Invalid file format'); }
   };
   r.readAsText(f);
