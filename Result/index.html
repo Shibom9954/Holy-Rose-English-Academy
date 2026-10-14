@@ -227,16 +227,20 @@ function showResult(){
   if(!student){err.innerHTML='❌ No student found with this Roll Number!';err.style.display='block';return;}
   
   const key = `${cName}_${sec}_${roll}`;
-  const cleanKeyName = key.replace(/[\.#\$\[\]]/g, '_');
-  const studentMarks = (data.marks||{})[key] || (data.marks||{})[cleanKeyName];
+  const cleanKey = key.replace(/[\.#\$\[\]]/g, '_');
+  const studentMarks = (data.marks||{})[key] || (data.marks||{})[cleanKey];
   if(!studentMarks){err.innerHTML='❌ Marks have not been entered for this student yet!';err.style.display='block';return;}
   
   const cls = data.classes.find(c=>c.name===cName);
-  let total=0, obtained=0;
+  let total = 0, obtained = 0;
 
-  // Safe number converter (AB / blank / galat value = 0)
+  function isBlank(v){
+    v = String(v ?? '').trim().toUpperCase();
+    return v === '' || v === 'UNDEFINED' || v === 'NULL' || v === 'NAN' || v === 'NONE';
+  }
   function toNum(v){
-    if(v === 'AB' || v === '') return 0;
+    v = String(v ?? '').trim().toUpperCase();
+    if(v === 'AB' || isBlank(v)) return 0;
     const n = parseFloat(v);
     return isNaN(n) ? 0 : n;
   }
@@ -252,34 +256,32 @@ function showResult(){
   </tr>`;
 
   (cls.subjects||[]).forEach(sub=>{
-    // Subject ke marks dhoondho (normal naam ya Firebase-safe naam se)
-    const safeSubName = sub.name.replace(/[\.#\$\[\]]/g, '_');
-    let m = studentMarks[sub.name] || studentMarks[safeSubName];
+    const safeName = String(sub.name || '').replace(/[\.#\$\[\]]/g, '_');
+    let m = studentMarks[sub.name] || studentMarks[safeName];
     if(!m || typeof m !== 'object') return;
-    
+
     let thStr = String(m.th ?? '').trim().toUpperCase();
     let prStr = String(m.pr ?? '').trim().toUpperCase();
     let totStr = String(m.tot ?? '').trim().toUpperCase();
 
     const isSingle = (sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single');
 
-    // ★★★ BLANK SUBJECT SKIP (MIL1 / MIL2 fix) ★★★
+    // ★★★ BLANK SUBJECT SKIP — MIL2 / empty subject nahi dikhega ★★★
     if(isSingle){
-      if(totStr === '') return;
+      if(isBlank(totStr)) return;
     } else {
-      if(thStr === '' && prStr === '') return;
+      if(isBlank(thStr) && isBlank(prStr)) return;
     }
-    
+
     let thVal = toNum(thStr);
     let prVal = toNum(prStr);
     let totVal = toNum(totStr);
-
     let isSubjectFail = false;
     
     if(isSingle) {
-      const fullM = toNum(String(sub.fullMarks));
-      const passM = toNum(String(sub.passMarks));
-      let actualTotDisplay = totStr === 'AB' ? 'AB' : totVal;
+      const fullM = toNum(sub.fullMarks);
+      const passM = toNum(sub.passMarks);
+      let actualTotDisplay = (totStr === 'AB') ? 'AB' : totVal;
       if(totStr === 'AB' || totVal < passM) isSubjectFail = true;
       
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
@@ -290,7 +292,8 @@ function showResult(){
         <td><b>${actualTotDisplay}</b></td>
         <td style="font-weight:bold">${isSubjectFail?'Fail':'Pass'}</td>
       </tr>`;
-      total += fullM; obtained += totVal;
+      total += fullM;
+      obtained += totVal;
     } else {
       let thMax = 80, prMax = 20, thPass = 24, prPass = 6;
       if(sub.type === 'elective_70_30'){
@@ -299,12 +302,12 @@ function showResult(){
         thMax = 50; prMax = 50; thPass = 15; prPass = 15;
       }
 
-      let thDisplay = thStr === 'AB' ? 'AB' : thVal;
-      let prDisplay = prStr === 'AB' ? 'AB' : prVal;
+      let thDisplay = (thStr === 'AB') ? 'AB' : thVal;
+      let prDisplay = (prStr === 'AB') ? 'AB' : prVal;
       let actualTotDisplay = (thStr === 'AB' && prStr === 'AB') ? 'AB' : (thVal + prVal);
       
-      if(thStr === 'AB' || prStr === 'AB' || thVal < thPass || prVal < prPass || (thVal + prVal) < 30) {
-          isSubjectFail = true;
+      if(thStr === 'AB' || prStr === 'AB' || thVal < thPass || prVal < prPass || (thVal + prVal) < 30){
+        isSubjectFail = true;
       }
 
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
@@ -316,20 +319,21 @@ function showResult(){
         <td><b>${actualTotDisplay}</b></td>
         <td style="font-weight:bold">${isSubjectFail?'Fail':'Pass'}</td>
       </tr>`;
-      total += 100; obtained += (thVal + prVal);
+      total += 100;
+      obtained += (thVal + prVal);
     }
   });
   
-  obtained = Math.round(obtained * 100) / 100;
-  const percent = total > 0 ? ((obtained / total) * 100).toFixed(1) : '0.0';
-  const grade = getGrade(parseFloat(percent));
+  obtained = Math.round((obtained + Number.EPSILON) * 100) / 100;
+  const percentNum = total > 0 ? (obtained / total) * 100 : 0;
+  const percent = percentNum.toFixed(1);
+  const grade = getGrade(percentNum);
   
-  const isOverallPass = parseFloat(percent) >= 30;
+  const isOverallPass = percentNum >= 30;
   const finalStatus = isOverallPass ? 'PASS' : 'FAIL';
-  
   const coCurrGrade = studentMarks.coCurricular || '-';
   
-  document.getElementById('marksheet').innerHTML=`
+  document.getElementById('marksheet').innerHTML = `
     <div class="ms-header">
       <img src="logo.png" alt="Logo">
       <h1>HOLY ROSE ENGLISH ACADEMY</h1>
@@ -355,9 +359,9 @@ function showResult(){
     </div>
     
     <div class="signature-area">
-      <div class="sig-box">Class Teacher Signature</div>
+      <div class="sig-box">Class Teacher's Signature</div>
       <div class="sig-box">Official Seal</div>
-      <div class="sig-box">Principal Signature</div>
+      <div class="sig-box">Principal's Signature</div>
     </div>
     
     <div class="nb-note">
@@ -368,7 +372,6 @@ function showResult(){
   document.getElementById('marksheetSection').style.display='block';
   window.scrollTo(0,0);
 }
-
 function goBack(){
   document.getElementById('searchSection').style.display='block';
   document.getElementById('marksheetSection').style.display='none';
