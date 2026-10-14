@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Holy Rose English Academy - Result Portal</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:linear-gradient(135deg,#0f5132 0%,#146c43 50%,#198754 100%);min-height:100vh;color:#333}
@@ -37,9 +39,9 @@ body{background:linear-gradient(135deg,#0f5132 0%,#146c43 50%,#198754 100%);min-
     position:relative;z-index:1;overflow:hidden;
 }
 
-/* Perfected Watermark CSS */
+/* Watermark CSS */
 .marksheet::before {
-    content: "HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREAHREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA ";
+    content: "HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA HREA";
     position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
     font-size: 14px; font-weight: 800; color: rgba(15,81,50,0.06);
     line-height: 4; letter-spacing: 8px; text-align: center;
@@ -54,7 +56,6 @@ body{background:linear-gradient(135deg,#0f5132 0%,#146c43 50%,#198754 100%);min-
     pointer-events: none; z-index: 0;
 }
 
-/* To keep all original text/boxes above the watermark */
 .ms-header, .student-info, table, .result-summary, .signature-area, .nb-note {
     position: relative; z-index: 2;
 }
@@ -103,19 +104,14 @@ table td:first-child{text-align:left;font-weight:600;}
 .signature-area{grid-template-columns:1fr;gap:40px}
 }
 
-/* Perfect A4 Print Setting (Fixed Layout Issues) */
 @media print{
   @page { size: A4 portrait; margin: 10mm; }
   body { background: #fff; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; zoom: 0.95; }
   .header, .action-buttons, .admin-btn, #searchSection { display: none !important; }
   .marksheet-container { display: block !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
   .marksheet { border: 2px solid #000 !important; box-shadow: none !important; margin: 0 auto !important; width: 100% !important; page-break-inside: avoid !important; border-radius:0 !important; padding: 25px !important; }
-  
-  /* Fix for Result Summary boxes breaking layout */
   .result-summary { display: flex !important; justify-content: space-between !important; gap: 5px !important; }
   .summary-item { flex: 1 !important; padding: 10px 5px !important; }
-  
-  /* Fix for Signatures stacking vertically */
   .signature-area { display: flex !important; justify-content: space-between !important; margin-top: 50px !important; gap: 10px !important; }
   .sig-box { flex: 1 !important; max-width: 30% !important; text-align: center !important; }
 }
@@ -158,13 +154,37 @@ table td:first-child{text-align:left;font-weight:600;}
 <div class="marksheet-container" id="marksheetSection">
 <div class="marksheet" id="marksheet"></div>
 <div class="action-buttons">
-<button class="btn-action btn-print" onclick="window.print()">🖨️ Print </button>
+<button class="btn-action btn-print" onclick="window.print()">🖨️ Print A4</button>
 <button class="btn-action btn-back" onclick="goBack()">← Back</button>
 </div>
 </div>
 
 <script>
+// Firebase Config Setup
+const firebaseConfig = {
+  apiKey: "AIzaSyBmALqMUSWyD2fnDX5hkaelB_dO-iR22Os",
+  authDomain: "hrea-result.firebaseapp.com",
+  databaseURL: "https://hrea-result-default-rtdb.firebaseio.com",
+  projectId: "hrea-result",
+  storageBucket: "hrea-result.firebasestorage.app",
+  messagingSenderId: "587879050700",
+  appId: "1:587879050700:web:5d3bc81173d5eafa450169",
+  measurementId: "G-RNY1K8BXXT"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 let data = JSON.parse(localStorage.getItem('schoolData')||'{"classes":[],"students":[],"marks":{},"settings":{"resultsPublished":false}}');
+
+// Sync Live Data from Firebase Cloud
+db.ref('schoolData').on('value', (snapshot) => {
+    const cloudData = snapshot.val();
+    if(cloudData) {
+        data = cloudData;
+        localStorage.setItem('schoolData', JSON.stringify(data));
+        loadClasses();
+    }
+});
 
 function loadClasses(){
   const sel = document.getElementById('selClass');
@@ -176,7 +196,7 @@ function loadSections(){
   const sel=document.getElementById('selSection');
   sel.innerHTML='<option value="">-- Select Section --</option>';
   const cls=data.classes.find(c=>c.name===cName);
-  if(cls) cls.sections.forEach(s=>sel.innerHTML+=`<option value="${s}">${s}</option>`);
+  if(cls && cls.sections) cls.sections.forEach(s=>sel.innerHTML+=`<option value="${s}">${s}</option>`);
 }
 
 function getGrade(p){
@@ -185,7 +205,7 @@ function getGrade(p){
   if(p>=70)return{g:'B+',r:'Very Good'};
   if(p>=60)return{g:'B',r:'Good'};
   if(p>=50)return{g:'C',r:'Average'};
-  if(p>=30)return{g:'D',r:'Pass'}; // Pass starts at 30% now
+  if(p>=30)return{g:'D',r:'Pass'};
   return{g:'F',r:'Fail'};
 }
 
@@ -202,11 +222,11 @@ function showResult(){
   const err=document.getElementById('errorMsg'); err.style.display='none';
   if(!cName||!sec||!roll){err.innerHTML='⚠️ Please fill all fields!';err.style.display='block';return;}
   
-  const student = data.students.find(s=>s.class===cName && s.section===sec && s.roll.toString()===roll);
+  const student = (data.students||[]).find(s=>s.class===cName && s.section===sec && s.roll.toString()===roll);
   if(!student){err.innerHTML='❌ No student found with this Roll Number!';err.style.display='block';return;}
   
   const key = `${cName}_${sec}_${roll}`;
-  const studentMarks = data.marks[key];
+  const studentMarks = (data.marks||{})[key];
   if(!studentMarks){err.innerHTML='❌ Marks have not been entered for this student yet!';err.style.display='block';return;}
   
   const cls = data.classes.find(c=>c.name===cName);
@@ -216,32 +236,28 @@ function showResult(){
     <th>Subjects</th>
     <th>Full Marks<br><small style="font-weight:normal">(Th + Pr)</small></th>
     <th>Pass Marks<br><small style="font-weight:normal">(Th + Pr)</small></th>
-    <th>Theory<br>Mark Obtained</th>
-    <th>Prac / Assig<br>Mark Obtained</th>
-    <th>Total<br>Mark Obtained</th>
+    <th>Theory<br>Marks Obtained</th>
+    <th>Prac / Assig<br>Marks Obtained</th>
+    <th>Total<br>Marks Obtained</th>
     <th>Remarks</th>
   </tr>`;
 
-  cls.subjects.forEach(sub=>{
+  (cls.subjects||[]).forEach(sub=>{
     let m = studentMarks[sub.name];
     if(!m) return;
     
-    // Convert to String to check for "AB"
     let thStr = String(m.th || '').trim().toUpperCase();
     let prStr = String(m.pr || '').trim().toUpperCase();
     let totStr = String(m.tot || '').trim().toUpperCase();
     
-    // Treat AB as 0 for calculation
     let thVal = thStr === 'AB' ? 0 : parseFloat(thStr || 0);
     let prVal = prStr === 'AB' ? 0 : parseFloat(prStr || 0);
     let totVal = totStr === 'AB' ? 0 : parseFloat(totStr || 0);
 
     let isSubjectFail = false;
     
-    // Yahan maine elective_single add kar diya hai
     if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
       let actualTotDisplay = totStr === 'AB' ? 'AB' : totVal;
-      
       if(totVal < sub.passMarks || totStr === 'AB') isSubjectFail = true;
       
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
@@ -254,13 +270,11 @@ function showResult(){
       </tr>`;
       total += parseInt(sub.fullMarks); obtained += totVal;
     } 
-    // Handling Normal Subjects & Normal Elective (Theory + Practical)
     else {
       let thDisplay = thStr === 'AB' ? 'AB' : thVal;
       let prDisplay = prStr === 'AB' ? 'AB' : prVal;
       let actualTotDisplay = (thStr === 'AB' && prStr === 'AB') ? 'AB' : (thVal + prVal);
       
-      // Fail Condition for Normal: Absent, Theory < 24, Prac < 6, or Total < 30
       if(thStr === 'AB' || prStr === 'AB' || thVal < 24 || prVal < 6 || (thVal + prVal) < 30) isSubjectFail = true;
 
       rows += `<tr style="${isSubjectFail?'color:#dc3545':''}">
@@ -276,11 +290,9 @@ function showResult(){
     }
   });
   
-  // FINAL RESULT LOGIC BASED ONLY ON 30% OF OVERALL TOTAL
   const percent = total > 0 ? ((obtained / total) * 100).toFixed(1) : 0;
   const grade = getGrade(percent);
   
-  // If overall percentage is 30% or more, they PASS, else FAIL.
   const isOverallPass = parseFloat(percent) >= 30;
   const finalStatus = isOverallPass ? 'PASS' : 'FAIL';
   
@@ -291,7 +303,7 @@ function showResult(){
       <img src="logo.png" alt="Logo">
       <h1>HOLY ROSE ENGLISH ACADEMY</h1>
       <p>REGISTERED UNDER ASSEB (ASSAM STATE SCHOOL EDUCATION BOARD)<br>U-Dise Code No:-18210802806, SILCHAR, ASSAM</p>
-      <h3>HALF-YEARLY EXAMINATION REPORT (2026-27)</h3>
+      <h3>ANNUAL PROGRESS REPORT (2025-26)</h3>
     </div>
     
     <div class="student-info">
@@ -318,7 +330,7 @@ function showResult(){
     </div>
     
     <div class="nb-note">
-      <strong>N.B:-</strong> Without Official seal and Principal signature, this marksheet will be considered invalid.
+      <strong>N.B:-</strong> Without Official seal and Principal signature, this marksheet will be considered as invalid.
     </div>`;
   
   document.getElementById('searchSection').style.display='none';
@@ -331,9 +343,6 @@ function goBack(){
   document.getElementById('marksheetSection').style.display='none';
 }
 
-window.addEventListener('focus', () => {
-    data = JSON.parse(localStorage.getItem('schoolData')||'{"classes":[],"students":[],"marks":{},"settings":{"resultsPublished":false}}');
-});
 loadClasses();
 </script>
 </body>
