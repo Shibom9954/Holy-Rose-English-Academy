@@ -458,60 +458,75 @@ function loadMarkForm(){
   const existing=(data.marks||{})[key]||{};
   
   let html='<table style="background:#fff; border:1px solid #ddd"><thead><tr><th>Subject</th><th>Type</th><th>Theory Mark</th><th>Practical/Assig Mark</th></tr></thead><tbody>';
+  
   (cls.subjects||[]).forEach(sub=>{
     let val = existing[sub.name] || {};
     if(typeof val !== 'object') val = {tot: val}; 
     
     if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
-      html+=`<tr>
-        <td><b>${sub.name}</b></td>
-        <td>${sub.type==='nursery'?'Nursery/KG':sub.type==='elective_single'?'Elective Single':'MIL'}</td>
-        <td colspan="2"><input type="text" id="mark_${sub.name}_tot" value="${val.tot||''}" placeholder="Marks or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
-      </tr>`;
-        } else {
+      let typeLabel = sub.type==='nursery'?'Nursery/KG':sub.type==='elective_single'?'Elective Single':'MIL';
+      html+='<tr>';
+      html+='<td><b>'+sub.name+'</b></td>';
+      html+='<td>'+typeLabel+'</td>';
+      html+='<td colspan="2"><input type="text" id="mark_'+sub.name+'_tot" value="'+(val.tot||'')+'" placeholder="Marks or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='</tr>';
+    } else {
       let thMax = 80, prMax = 20;
-      if(sub.type === 'elective_70_30'){ thMax = 70; prMax = 30; }
-      else if(sub.type === 'elective_50_50'){ thMax = 50; prMax = 50; }
+      let typeLabel = 'Normal';
+      if(sub.type === 'elective_70_30'){ thMax = 70; prMax = 30; typeLabel = 'Elective (70+30)'; }
+      else if(sub.type === 'elective_50_50'){ thMax = 50; prMax = 50; typeLabel = 'Elective (50+50)'; }
+      else if(sub.type === 'elective'){ typeLabel = 'Elective (80+20)'; }
       
-      let typeLabel = sub.type==='elective_70_30'?'Elective (70+30)':sub.type==='elective_50_50'?'Elective (50+50)':sub.type==='elective'?'Elective':sub.type;
-
-      html+=`<tr>
-        <td><b>${sub.name}</b></td>
-        <td>${typeLabel}</td>
-        <td><input type="text" id="mark_${sub.name}_th" value="${val.th||''}" placeholder="Max ${thMax} or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
-        <td><input type="text" id="mark_${sub.name}_pr" value="${val.pr||''}" placeholder="Max ${prMax} or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
-      </tr>`;
+      html+='<tr>';
+      html+='<td><b>'+sub.name+'</b></td>';
+      html+='<td>'+typeLabel+'</td>';
+      html+='<td><input type="text" id="mark_'+sub.name+'_th" value="'+(val.th||'')+'" placeholder="Max '+thMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='<td><input type="text" id="mark_'+sub.name+'_pr" value="'+(val.pr||'')+'" placeholder="Max '+prMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='</tr>';
     }
   });
   
   let coVal = existing.coCurricular || '';
-  html+=`<tr style="background:#f8f9fa"><td colspan="2"><b style="color:#0f5132">⭐ Co-curricular Grade</b></td><td colspan="2"><input type="text" id="mark_co" value="${coVal}" placeholder="e.g. A, B, A+" style="width:100%;padding:8px;border:2px solid #0f5132;border-radius:4px"></td></tr>`;
+  html+='<tr style="background:#f8f9fa"><td colspan="2"><b style="color:#0f5132">⭐ Co-curricular Grade</b></td><td colspan="2"><input type="text" id="mark_co" value="'+coVal+'" placeholder="e.g. A, B, A+" style="width:100%;padding:8px;border:2px solid #0f5132;border-radius:4px"></td></tr>';
   
   html+='</tbody></table><br><button class="btn" onclick="saveMarks()">💾 Save Marks to Cloud</button>';
   document.getElementById('marksForm').innerHTML=html;
 }
 function saveMarks(){
-  const c=document.getElementById('markClass').value;
-  const s=document.getElementById('markSection').value;
-  const r=document.getElementById('markStudent').value;
-  const cls=data.classes.find(cl=>cl.name===c);
-  const key=`${c}_${s}_${r}`;
-  const marks={};
-  
-  (cls.subjects||[]).forEach(sub=>{
-    if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
-      marks[sub.name] = { tot: document.getElementById(`mark_${sub.name}_tot`).value };
-    } else {
-      marks[sub.name] = { 
-        th: document.getElementById(`mark_${sub.name}_th`).value,
-        pr: document.getElementById(`mark_${sub.name}_pr`).value 
-      };
-    }
-  });
-  marks.coCurricular = document.getElementById('mark_co').value;
-  if(!data.marks) data.marks = {};
-  data.marks[key]=marks;
-  save();alert('☁️ Marks Saved & Synced to Google Cloud!');updateStats();
+  try {
+    const c=document.getElementById('markClass').value;
+    const s=document.getElementById('markSection').value;
+    const r=document.getElementById('markStudent').value;
+    const cls=data.classes.find(cl=>cl.name===c);
+    if(!cls){alert('Class not found!');return;}
+    const key=`${c}_${s}_${r}`;
+    const marks={};
+    
+    (cls.subjects||[]).forEach(sub=>{
+      if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
+        const el = document.getElementById('mark_'+sub.name+'_tot');
+        if(el) marks[sub.name] = { tot: el.value };
+      } else {
+        const elTh = document.getElementById('mark_'+sub.name+'_th');
+        const elPr = document.getElementById('mark_'+sub.name+'_pr');
+        if(elTh && elPr) {
+          marks[sub.name] = { th: elTh.value, pr: elPr.value };
+        }
+      }
+    });
+    
+    const coEl = document.getElementById('mark_co');
+    if(coEl) marks.coCurricular = coEl.value;
+    
+    if(!data.marks) data.marks = {};
+    data.marks[key]=marks;
+    save();
+    alert('☁️ Marks Saved & Synced to Google Cloud!');
+    updateStats();
+  } catch(e) {
+    console.error('Save Error:', e);
+    alert('❌ Error saving! Check browser console (F12) for details.');
+  }
 }
 
 function changePass(){
