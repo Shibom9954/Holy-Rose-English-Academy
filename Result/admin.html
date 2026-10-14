@@ -167,6 +167,8 @@ table tr:hover{background:#f8f9fa}
 <option value="nursery">Nursery/KG (Single Subject)</option>
 <option value="elective">Elective (Th + Pr)</option>
 <option value="elective_single">Elective (Single Subject)</option>
+<option value="elective_70_30">Elective (70+30)</option>
+<option value="elective_50_50">Elective (50+50)</option>
 </select>
 <button class="btn" onclick="addSubject()">+ Add</button>
 </div>
@@ -360,7 +362,9 @@ function loadSubjects(){
       ${s.type==='mil'?'<span class="badge badge-mil">MIL</span>':
         s.type==='nursery'?'<span class="badge badge-nur">Nursery/KG</span>':
         s.type==='elective'?'<span class="badge badge-ele">Elective</span>':
-        s.type==='elective_single'?'<span class="badge badge-ele-single">Elective Single</span>':''}
+        s.type==='elective_single'?'<span class="badge badge-ele-single">Elective Single</span>':
+        s.type==='elective_70_30'?'<span class="badge" style="background:#e83e8c;color:#fff">Elective 70+30</span>':
+        s.type==='elective_50_50'?'<span class="badge" style="background:#fd7e14;color:#fff">Elective 50+50</span>':''}
     </div>
     <div>Full: ${s.fullMarks}</div><div>Pass: ${s.passMarks}</div><div>${s.type}</div>
     <button class="btn btn-danger btn-sm" onclick="deleteSubject('${cName}',${i})">×</button>
@@ -464,12 +468,18 @@ function loadMarkForm(){
         <td>${sub.type==='nursery'?'Nursery/KG':sub.type==='elective_single'?'Elective Single':'MIL'}</td>
         <td colspan="2"><input type="text" id="mark_${sub.name}_tot" value="${val.tot||''}" placeholder="Marks or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
       </tr>`;
-    } else {
+        } else {
+      let thMax = 80, prMax = 20;
+      if(sub.type === 'elective_70_30'){ thMax = 70; prMax = 30; }
+      else if(sub.type === 'elective_50_50'){ thMax = 50; prMax = 50; }
+      
+      let typeLabel = sub.type==='elective_70_30'?'Elective (70+30)':sub.type==='elective_50_50'?'Elective (50+50)':sub.type==='elective'?'Elective':sub.type;
+
       html+=`<tr>
         <td><b>${sub.name}</b></td>
-        <td>${sub.type==='elective'?'Elective':sub.type}</td>
-        <td><input type="text" id="mark_${sub.name}_th" value="${val.th||''}" placeholder="Max 80 or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
-        <td><input type="text" id="mark_${sub.name}_pr" value="${val.pr||''}" placeholder="Max 20 or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
+        <td>${typeLabel}</td>
+        <td><input type="text" id="mark_${sub.name}_th" value="${val.th||''}" placeholder="Max ${thMax} or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
+        <td><input type="text" id="mark_${sub.name}_pr" value="${val.pr||''}" placeholder="Max ${prMax} or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
       </tr>`;
     }
   });
