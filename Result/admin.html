@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Holy Rose English Academy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#f0f2f5;color:#333}
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f5132,#198754)}
+.login-box{background:#fff;padding:40px;border-radius:15px;box-shadow:0 20px 60px rgba(0,0,0,0.3);width:90%;max-width:380px;animation:slideUp 0.5s}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.login-box img{width:80px;display:block;margin:0 auto 15px}
+.login-box h2{text-align:center;color:#0f5132;margin-bottom:25px}
+.login-box input{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;margin-bottom:15px;font-size:15px;outline:none}
+.login-box input:focus{border-color:#198754}
+.login-box button{width:100%;padding:12px;background:#0f5132;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;transition:0.3s}
+.login-box button:hover{background:#146c43}
+.hint{text-align:center;color:#999;font-size:12px;margin-top:15px}
+
+.admin-page{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;width:260px;height:100vh;background:#0f5132;color:#fff;padding:20px;overflow-y:auto}
+.sidebar-header{text-align:center;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.2);margin-bottom:20px}
+.sidebar-header img{width:60px;margin-bottom:10px}
+.sidebar-header h3{font-size:16px}
+.sidebar-header p{font-size:11px;opacity:0.8}
+.nav-item{display:block;padding:12px 15px;color:#fff;text-decoration:none;border-radius:8px;margin-bottom:5px;cursor:pointer;transition:0.3s;font-size:14px}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.15);padding-left:20px}
+.main{margin-left:260px;padding:30px}
+.topbar{background:#fff;padding:15px 25px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.topbar h2{color:#0f5132}
+.logout-btn{background:#dc3545;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer}
+
+.section{background:#fff;padding:25px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:20px;display:none}
+.section.active{display:block;animation:fadeIn 0.4s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.section h3{color:#0f5132;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #e0e0e0}
+
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:15px}
+.form-row input,.form-row select{padding:10px;border:2px solid #e0e0e0;border-radius:6px;font-size:14px;outline:none}
+.form-row input:focus,.form-row select:focus{border-color:#198754}
+.btn{padding:10px 20px;background:#0f5132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;transition:0.3s}
+.btn:hover{background:#146c43}
+.btn-danger{background:#dc3545}
+.btn-danger:hover{background:#bb2d3b}
+.btn-warning{background:#ffc107;color:#000}
+.btn-sm{padding:5px 12px;font-size:12px}
+
+table{width:100%;border-collapse:collapse;margin-top:15px}
+table th{background:#0f5132;color:#fff;padding:12px;text-align:left;font-size:13px}
+table td{padding:10px 12px;border-bottom:1px solid #e0e0e0;font-size:14px}
+table tr:hover{background:#f8f9fa}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
+.stat-card{background:linear-gradient(135deg,#0f5132,#198754);color:#fff;padding:20px;border-radius:10px;text-align:center}
+.stat-card h4{font-size:13px;opacity:0.9;margin-bottom:5px}
+.stat-card p{font-size:30px;font-weight:700}
+
+.publish-card { background: #fff3cd; border: 2px solid #ffe69c; color: #664d03; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-radius: 10px; margin-bottom: 25px; }
+.publish-info h4 { font-size: 18px; margin-bottom: 5px; }
+.publish-info p { font-size: 13px; }
+
+.subject-row{background:#f8f9fa;padding:10px;border-radius:6px;margin-bottom:8px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:center}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;background:#198754;color:#fff;margin-left:5px}
+.badge-mil{background:#ffc107;color:#000}
+.badge-ele{background:#0d6efd}
+.badge-nur{background:#6f42c1;color:#fff}
+.badge-ele-single{background:#9c27b0;color:#fff}
+
+.alert{padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px}
+.alert-success{background:#d1e7dd;color:#0a3622}
+.alert-info{background:#cff4fc;color:#055160}
+
+@media(max-width:800px){
+.sidebar{width:100%;height:auto;position:relative}
+.main{margin-left:0;padding:15px}
+.subject-row{grid-template-columns:1fr 1fr;gap:5px}
+.publish-card{flex-direction:column;text-align:center;gap:15px;}
+}
+</style>
+</head>
+<body>
+
+<div class="login-page" id="loginPage">
+<div class="login-box">
+<img src="logo.png" alt="Logo">
+<h2>🔐 Admin Login</h2>
+<input type="password" id="passwordInput" placeholder="Enter Admin Password" onkeypress="if(event.key==='Enter')login()">
+<button onclick="login()">Login</button>
+<a href="index.html" style="display:block; text-align:center; margin-top:20px; color:#0f5132; text-decoration:none; font-weight:600; font-size:15px; padding:10px; border:2px solid #0f5132; border-radius:8px;">
+← Back to Result Portal
+</a>
+
+</div>
+</div>
+
+<div class="admin-page" id="adminPage">
+<div class="sidebar">
+<div class="sidebar-header">
+<img src="logo.png" alt="Logo">
+<h3>Holy Rose Academy</h3>
+<p>Admin Dashboard</p>
+</div>
+<div class="nav-item active" onclick="showSection('dashboard',this)">📊 Dashboard</div>
+<div class="nav-item" onclick="showSection('classes',this)">🏫 Classes & Sections</div>
+<div class="nav-item" onclick="showSection('subjects',this)">📚 Subjects Setup</div>
+<div class="nav-item" onclick="showSection('students',this)">👨‍🎓 Students</div>
+<div class="nav-item" onclick="showSection('marks',this)">📝 Enter Marks</div>
+<div class="nav-item" onclick="showSection('settings',this)">⚙️ Settings</div>
+<div class="nav-item" onclick="window.open('index.html','_blank')">🌐 View Website</div>
+</div>
+
+<div class="main">
+<div class="topbar">
+<h2 id="pageTitle">Dashboard</h2>
+<button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="section active" id="dashboard">
+<h3>Welcome to Admin Panel</h3>
+<div class="publish-card">
+  <div class="publish-info">
+    <h4 id="pubStatusText">🔴 Results are currently HIDDEN</h4>
+    <p>Students cannot see their results until you publish them.</p>
+  </div>
+  <button class="btn" id="pubBtn" onclick="togglePublish()" style="font-size: 16px; padding: 12px 25px;"></button>
+</div>
+<div class="stats">
+<div class="stat-card"><h4>Total Classes</h4><p id="statClasses">0</p></div>
+<div class="stat-card"><h4>Total Students</h4><p id="statStudents">0</p></div>
+<div class="stat-card"><h4>Results Entered</h4><p id="statResults">0</p></div>
+</div>
+<div class="alert alert-info">
+<b>📘 Quick Guide:</b><br>
+👉 Type <b>AB</b> in any marks box if the student was Absent.<br>
+👉 <b>Elective (Single)</b> = bilkul MIL jaisa (sirf Total marks)<br>
+👉 <b>Elective (Th + Pr)</b> = Theory + Practical wala<br>
+👉 Nursery/KG ke liye "Nursery/KG (Single Subject)" use karo.
+</div>
+</div>
+
+<div class="section" id="classes">
+<h3>Manage Classes & Sections</h3>
+<div class="form-row">
+<input type="text" id="newClassName" placeholder="Class Name (e.g., Nursery, Class 8)">
+<input type="text" id="newClassSections" placeholder="Sections (comma separated: A,B,C)">
+<button class="btn" onclick="addClass()">+ Add Class</button>
+</div>
+<table>
+<thead><tr><th>Class Name</th><th>Sections</th><th>Subjects</th><th>Action</th></tr></thead>
+<tbody id="classesTable"></tbody>
+</table>
+</div>
+
+<div class="section" id="subjects">
+<h3>Setup Subjects for Each Class</h3>
+<div class="form-row">
+<select id="subClassSel" onchange="loadSubjects()"><option value="">-- Select Class --</option></select>
+</div>
+<div id="subjectsPanel" style="display:none">
+<div class="form-row">
+<input type="text" id="newSubName" placeholder="Subject Name (e.g., English)">
+<input type="number" id="newSubFull" placeholder="Full Marks (e.g., 100)">
+<input type="number" id="newSubPass" placeholder="Pass Marks (e.g., 30)">
+<select id="newSubType">
+<option value="normal">Normal (Th 80 + Pr 20)</option>
+<option value="mil">MIL (Single Subject)</option>
+<option value="nursery">Nursery/KG (Single Subject)</option>
+<option value="elective">Elective (Th + Pr)</option>
+<option value="elective_single">Elective (Single Subject)</option>
+</select>
+<button class="btn" onclick="addSubject()">+ Add</button>
+</div>
+<div id="subjectsList"></div>
+</div>
+</div>
+
+<div class="section" id="students">
+<h3>Manage Students</h3>
+<div class="form-row">
+<select id="stuClass" onchange="loadStuSections()"><option value="">-- Select Class --</option></select>
+<select id="stuSection"><option value="">-- Select Section --</option></select>
+<input type="text" id="stuRoll" placeholder="Roll No.">
+<input type="text" id="stuName" placeholder="Full Name">
+<input type="text" id="stuFather" placeholder="Father's Name">
+<button class="btn" onclick="addStudent()">+ Add Student</button>
+</div>
+<div class="form-row">
+<select id="filterClass" onchange="loadStudents()"><option value="">All Classes</option></select>
+<select id="filterSection" onchange="loadStudents()"><option value="">All Sections</option></select>
+</div>
+<table>
+<thead><tr><th>Roll</th><th>Name</th><th>Father</th><th>Class</th><th>Section</th><th>Action</th></tr></thead>
+<tbody id="studentsTable"></tbody>
+</table>
+</div>
+
+<div class="section" id="marks">
+<h3>Enter Marks</h3>
+<div class="form-row">
+<select id="markClass" onchange="loadMarkSections()"><option value="">-- Class --</option></select>
+<select id="markSection" onchange="loadMarkStudents()"><option value="">-- Section --</option></select>
+<select id="markStudent" onchange="loadMarkForm()"><option value="">-- Student --</option></select>
+</div>
+<div id="marksForm"></div>
+</div>
+
+<div class="section" id="settings">
+<h3>Settings</h3>
+<div class="form-row">
+<input type="password" id="newPass" placeholder="Enter New Password">
+<button class="btn" onclick="changePass()">Change Password</button>
+</div>
+<hr style="margin:20px 0">
+<h4>Backup Data</h4>
+<button class="btn" onclick="exportData()">⬇️ Download Backup File</button>
+<br><br>
+<h4>Restore Data</h4>
+<input type="file" id="importFile" accept=".json" onchange="importData(event)">
+</div>
+
+</div>
+</div>
+
+<script>
+let defaultData = { classes: [], students: [], marks: {}, settings: { resultsPublished: false } };
+let data = JSON.parse(localStorage.getItem('schoolData')) || defaultData;
+if(!data.settings) data.settings = { resultsPublished: false };
+let adminPass = localStorage.getItem('adminPass') || 'HREA@2008';
+
+function save(){localStorage.setItem('schoolData',JSON.stringify(data));}
+
+function login(){
+  const p = document.getElementById('passwordInput').value;
+  if(p===adminPass){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('adminPage').style.display='block';
+    sessionStorage.setItem('loggedIn','1');
+    refreshAll();
+  } else alert('Wrong Password!');
+}
+function logout(){sessionStorage.removeItem('loggedIn');location.reload();}
+if(sessionStorage.getItem('loggedIn')){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('adminPage').style.display='block';
+  setTimeout(refreshAll,100);
+}
+
+function showSection(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('pageTitle').textContent=el.textContent.trim();
+  refreshAll();
+}
+
+function refreshAll(){
+  updateStats();
+  updatePublishUI();
+  loadClassesTable();
+  loadClassDropdowns();
+  loadStudents();
+}
+
+function updateStats(){
+  document.getElementById('statClasses').textContent=data.classes.length;
+  document.getElementById('statStudents').textContent=data.students.length;
+  document.getElementById('statResults').textContent=Object.keys(data.marks).length;
+}
+
+function updatePublishUI() {
+  const isPub = data.settings.resultsPublished;
+  const statusText = document.getElementById('pubStatusText');
+  const btn = document.getElementById('pubBtn');
+  const card = document.querySelector('.publish-card');
+  if(isPub) {
+    statusText.innerHTML = '🟢 Results are LIVE on website';
+    card.style.background = '#d1e7dd'; card.style.borderColor = '#a3cfbb'; card.style.color = '#0a3622';
+    btn.textContent = 'Hide Results'; btn.style.background = '#dc3545';
+  } else {
+    statusText.innerHTML = '🔴 Results are HIDDEN from students';
+    card.style.background = '#f8d7da'; card.style.borderColor = '#f1aeb5'; card.style.color = '#842029';
+    btn.textContent = 'Publish Now'; btn.style.background = '#198754';
+  }
+}
+
+function togglePublish() {
+  data.settings.resultsPublished = !data.settings.resultsPublished;
+  save(); updatePublishUI();
+  if(data.settings.resultsPublished) alert('✅ Results PUBLISHED!'); else alert('🚫 Results HIDDEN!');
+}
+
+function addClass(){
+  const name=document.getElementById('newClassName').value.trim();
+  const secs=document.getElementById('newClassSections').value.trim();
+  if(!name||!secs)return alert('Fill both fields!');
+  if(data.classes.find(c=>c.name===name))return alert('Class already exists!');
+  data.classes.push({name,sections:secs.split(',').map(s=>s.trim()),subjects:[]});
+  save();loadClassesTable();loadClassDropdowns();
+  document.getElementById('newClassName').value='';
+  document.getElementById('newClassSections').value='';
+}
+function deleteClass(name){
+  if(!confirm('Delete this class and all its data?'))return;
+  data.classes=data.classes.filter(c=>c.name!==name);
+  data.students=data.students.filter(s=>s.class!==name);
+  save();refreshAll();
+}
+function loadClassesTable(){
+  const tb=document.getElementById('classesTable');
+  tb.innerHTML=data.classes.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.sections.join(', ')}</td><td>${c.subjects.length} subjects</td><td><button class="btn btn-danger btn-sm" onclick="deleteClass('${c.name}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#999">No classes added yet</td></tr>';
+}
+
+function loadClassDropdowns(){
+  const opts='<option value="">-- Select Class --</option>'+data.classes.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  ['subClassSel','stuClass','filterClass','markClass'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=opts;
+  });
+}
+
+function loadSubjects(){
+  const cName=document.getElementById('subClassSel').value;
+  const panel=document.getElementById('subjectsPanel');
+  if(!cName){panel.style.display='none';return;}
+  panel.style.display='block';
+  const cls=data.classes.find(c=>c.name===cName);
+  const list=document.getElementById('subjectsList');
+  list.innerHTML=cls.subjects.map((s,i)=>`
+  <div class="subject-row">
+    <div><b>${s.name}</b> 
+      ${s.type==='mil'?'<span class="badge badge-mil">MIL</span>':
+        s.type==='nursery'?'<span class="badge badge-nur">Nursery/KG</span>':
+        s.type==='elective'?'<span class="badge badge-ele">Elective</span>':
+        s.type==='elective_single'?'<span class="badge badge-ele-single">Elective Single</span>':''}
+    </div>
+    <div>Full: ${s.fullMarks}</div><div>Pass: ${s.passMarks}</div><div>${s.type}</div>
+    <button class="btn btn-danger btn-sm" onclick="deleteSubject('${cName}',${i})">×</button>
+  </div>`).join('')||'<p style="color:#999">No subjects added yet</p>';
+}
+function addSubject(){
+  const cName=document.getElementById('subClassSel').value;
+  const name=document.getElementById('newSubName').value.trim();
+  const full=document.getElementById('newSubFull').value;
+  const pass=document.getElementById('newSubPass').value;
+  const type=document.getElementById('newSubType').value;
+  if(!name||!full||!pass)return alert('Fill all fields!');
+  const cls=data.classes.find(c=>c.name===cName);
+  cls.subjects.push({name,fullMarks:+full,passMarks:+pass,type});
+  save();loadSubjects();
+  document.getElementById('newSubName').value='';
+}
+function deleteSubject(cName,i){
+  if(!confirm('Delete this subject?'))return;
+  const cls=data.classes.find(c=>c.name===cName);
+  cls.subjects.splice(i,1);save();loadSubjects();
+}
+
+function loadStuSections(){
+  const cName=document.getElementById('stuClass').value;
+  const sel=document.getElementById('stuSection');
+  sel.innerHTML='<option value="">-- Select Section --</option>';
+  const cls=data.classes.find(c=>c.name===cName);
+  if(cls)cls.sections.forEach(s=>sel.innerHTML+=`<option>${s}</option>`);
+  const fName=document.getElementById('filterClass').value;
+  const fSel=document.getElementById('filterSection');
+  fSel.innerHTML='<option value="">All Sections</option>';
+  const fcls=data.classes.find(c=>c.name===fName);
+  if(fcls)fcls.sections.forEach(s=>fSel.innerHTML+=`<option>${s}</option>`);
+}
+function addStudent(){
+  const cls=document.getElementById('stuClass').value;
+  const sec=document.getElementById('stuSection').value;
+  const roll=document.getElementById('stuRoll').value.trim();
+  const name=document.getElementById('stuName').value.trim();
+  const father=document.getElementById('stuFather').value.trim();
+  if(!cls||!sec||!roll||!name)return alert('Fill required fields!');
+  if(data.students.find(s=>s.class===cls&&s.section===sec&&s.roll.toString()===roll))return alert('Roll already exists in this section!');
+  data.students.push({class:cls,section:sec,roll,name,father});
+  save();loadStudents();
+  ['stuRoll','stuName','stuFather'].forEach(id=>document.getElementById(id).value='');
+}
+function deleteStudent(i){
+  if(!confirm('Delete this student?'))return;
+  const s=data.students[i];
+  delete data.marks[`${s.class}_${s.section}_${s.roll}`];
+  data.students.splice(i,1);save();loadStudents();
+}
+function loadStudents(){
+  const fc=document.getElementById('filterClass')?.value||'';
+  const fs=document.getElementById('filterSection')?.value||'';
+  const fcls=data.classes.find(c=>c.name===fc);
+  const fSel=document.getElementById('filterSection');
+  if(fSel){
+    const current=fSel.value;
+    fSel.innerHTML='<option value="">All Sections</option>';
+    if(fcls)fcls.sections.forEach(s=>fSel.innerHTML+=`<option ${s===current?'selected':''}>${s}</option>`);
+  }
+  const list=data.students.filter(s=>(!fc||s.class===fc)&&(!fs||s.section===fs));
+  const tb=document.getElementById('studentsTable');
+  tb.innerHTML=list.map((s)=>{
+    const realI=data.students.indexOf(s);
+    return `<tr><td>${s.roll}</td><td>${s.name}</td><td>${s.father||'-'}</td><td>${s.class}</td><td>${s.section}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStudent(${realI})">Delete</button></td></tr>`;
+  }).join('')||'<tr><td colspan="6" style="text-align:center;color:#999">No students</td></tr>';
+}
+
+function loadMarkSections(){
+  const cName=document.getElementById('markClass').value;
+  const sel=document.getElementById('markSection');
+  sel.innerHTML='<option value="">-- Section --</option>';
+  const cls=data.classes.find(c=>c.name===cName);
+  if(cls)cls.sections.forEach(s=>sel.innerHTML+=`<option>${s}</option>`);
+  document.getElementById('markStudent').innerHTML='<option value="">-- Student --</option>';
+  document.getElementById('marksForm').innerHTML='';
+}
+function loadMarkStudents(){
+  const c=document.getElementById('markClass').value;
+  const s=document.getElementById('markSection').value;
+  const sel=document.getElementById('markStudent');
+  sel.innerHTML='<option value="">-- Student --</option>';
+  data.students.filter(st=>st.class===c&&st.section===s).forEach(st=>sel.innerHTML+=`<option value="${st.roll}">${st.roll} - ${st.name}</option>`);
+  document.getElementById('marksForm').innerHTML='';
+}
+function loadMarkForm(){
+  const c=document.getElementById('markClass').value;
+  const s=document.getElementById('markSection').value;
+  const r=document.getElementById('markStudent').value;
+  if(!c||!s||!r){document.getElementById('marksForm').innerHTML='';return;}
+  const cls=data.classes.find(cl=>cl.name===c);
+  const key=`${c}_${s}_${r}`;
+  const existing=data.marks[key]||{};
+  
+  let html='<table style="background:#fff; border:1px solid #ddd"><thead><tr><th>Subject</th><th>Type</th><th>Theory Mark</th><th>Practical/Assig Mark</th></tr></thead><tbody>';
+  cls.subjects.forEach(sub=>{
+    let val = existing[sub.name] || {};
+    if(typeof val !== 'object') val = {tot: val}; 
+    
+    if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
+      html+=`<tr>
+        <td><b>${sub.name}</b></td>
+        <td>${sub.type==='nursery'?'Nursery/KG':sub.type==='elective_single'?'Elective Single':'MIL'}</td>
+        <td colspan="2"><input type="text" id="mark_${sub.name}_tot" value="${val.tot||''}" placeholder="Marks or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
+      </tr>`;
+    } else {
+      html+=`<tr>
+        <td><b>${sub.name}</b></td>
+        <td>${sub.type==='elective'?'Elective':sub.type}</td>
+        <td><input type="text" id="mark_${sub.name}_th" value="${val.th||''}" placeholder="Max 80 or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
+        <td><input type="text" id="mark_${sub.name}_pr" value="${val.pr||''}" placeholder="Max 20 or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>
+      </tr>`;
+    }
+  });
+  
+  let coVal = existing.coCurricular || '';
+  html+=`<tr style="background:#f8f9fa"><td colspan="2"><b style="color:#0f5132">⭐ Co-curricular Grade</b></td><td colspan="2"><input type="text" id="mark_co" value="${coVal}" placeholder="e.g. A, B, A+" style="width:100%;padding:8px;border:2px solid #0f5132;border-radius:4px"></td></tr>`;
+  
+  html+='</tbody></table><br><button class="btn" onclick="saveMarks()">💾 Save Marks</button>';
+  document.getElementById('marksForm').innerHTML=html;
+}
+function saveMarks(){
+  const c=document.getElementById('markClass').value;
+  const s=document.getElementById('markSection').value;
+  const r=document.getElementById('markStudent').value;
+  const cls=data.classes.find(cl=>cl.name===c);
+  const key=`${c}_${s}_${r}`;
+  const marks={};
+  
+  cls.subjects.forEach(sub=>{
+    if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
+      marks[sub.name] = { tot: document.getElementById(`mark_${sub.name}_tot`).value };
+    } else {
+      marks[sub.name] = { 
+        th: document.getElementById(`mark_${sub.name}_th`).value,
+        pr: document.getElementById(`mark_${sub.name}_pr`).value 
+      };
+    }
+  });
+  marks.coCurricular = document.getElementById('mark_co').value;
+  data.marks[key]=marks;
+  save();alert('✅ Marks saved successfully!');updateStats();
+}
+
+function changePass(){
+  const p=document.getElementById('newPass').value.trim();
+  if(p.length<4)return alert('Password too short!');
+  localStorage.setItem('adminPass',p);adminPass=p;
+  alert('Password changed!');document.getElementById('newPass').value='';
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`HolyRose_Backup_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function importData(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const importedData = JSON.parse(ev.target.result);
+      if(!importedData.settings) importedData.settings = { resultsPublished: false };
+      data = importedData;
+      save(); refreshAll(); alert('✅ Data imported successfully!');
+    }catch(err){ alert('Invalid file format'); }
+  };
+  r.readAsText(f);
+}
+</script>
+</body>
+</html>
