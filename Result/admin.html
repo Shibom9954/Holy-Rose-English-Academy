@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - Holy Rose English Academy</title>
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
@@ -73,6 +72,7 @@ table tr:hover{background:#f8f9fa}
 .alert{padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px}
 .alert-success{background:#d1e7dd;color:#0a3622}
 .alert-info{background:#cff4fc;color:#055160}
+.alert-warning{background:#fff3cd;color:#664d03;border:1px solid #ffe69c}
 
 @media(max-width:800px){
 .sidebar{width:100%;height:auto;position:relative}
@@ -93,7 +93,6 @@ table tr:hover{background:#f8f9fa}
 <a href="index.html" style="display:block; text-align:center; margin-top:20px; color:#0f5132; text-decoration:none; font-weight:600; font-size:15px; padding:10px; border:2px solid #0f5132; border-radius:8px;">
 ← Back to Result Portal
 </a>
-
 </div>
 </div>
 
@@ -163,6 +162,7 @@ table tr:hover{background:#f8f9fa}
 <input type="number" id="newSubPass" placeholder="Pass Marks (e.g., 30)">
 <select id="newSubType">
 <option value="normal">Normal (Th 80 + Pr 20)</option>
+<option value="normal_90_10">Normal (Th 90 + Pr 10)</option>
 <option value="mil">MIL (Single Subject)</option>
 <option value="nursery">Nursery/KG (Single Subject)</option>
 <option value="elective">Elective (Th + Pr)</option>
@@ -198,6 +198,9 @@ table tr:hover{background:#f8f9fa}
 
 <div class="section" id="marks">
 <h3>Enter Marks</h3>
+<div class="alert alert-warning">
+<b>⚠️ Important:</b> If a student has not opted for a particular subject (e.g., 2nd MIL or 2nd Elective), leave the corresponding marks box <b>completely blank</b>. Subjects that have not been opted for must <b>not be included in the total marks calculation</b>
+</div>
 <div class="form-row">
 <select id="markClass" onchange="loadMarkSections()"><option value="">-- Class --</option></select>
 <select id="markSection" onchange="loadMarkStudents()"><option value="">-- Section --</option></select>
@@ -224,7 +227,6 @@ table tr:hover{background:#f8f9fa}
 </div>
 
 <script>
-// Firebase Config Setup
 const firebaseConfig = {
   apiKey: "AIzaSyBmALqMUSWyD2fnDX5hkaelB_dO-iR22Os",
   authDomain: "hrea-result.firebaseapp.com",
@@ -243,7 +245,6 @@ let data = JSON.parse(localStorage.getItem('schoolData')) || defaultData;
 if(!data.settings) data.settings = { resultsPublished: false };
 let adminPass = localStorage.getItem('adminPass') || 'HREA@2008';
 
-// Firebase Live Sync
 db.ref('schoolData').on('value', (snapshot) => {
     const cloudData = snapshot.val();
     if(cloudData) {
@@ -363,6 +364,7 @@ function loadSubjects(){
         s.type==='nursery'?'<span class="badge badge-nur">Nursery/KG</span>':
         s.type==='elective'?'<span class="badge badge-ele">Elective</span>':
         s.type==='elective_single'?'<span class="badge badge-ele-single">Elective Single</span>':
+        s.type==='normal_90_10'?'<span class="badge" style="background:#17a2b8;color:#fff">Normal 90+10</span>':
         s.type==='elective_70_30'?'<span class="badge" style="background:#e83e8c;color:#fff">Elective 70+30</span>':
         s.type==='elective_50_50'?'<span class="badge" style="background:#fd7e14;color:#fff">Elective 50+50</span>':''}
     </div>
@@ -459,7 +461,7 @@ function loadMarkForm(){
   
   let html='<table style="background:#fff; border:1px solid #ddd"><thead><tr><th>Subject</th><th>Type</th><th>Theory Mark</th><th>Practical/Assig Mark</th></tr></thead><tbody>';
   
-  (cls.subjects||[]).forEach(sub=>{
+  (cls.subjects||[]).forEach((sub, idx)=>{
     let val = existing[sub.name] || {};
     if(typeof val !== 'object') val = {tot: val}; 
     
@@ -468,20 +470,21 @@ function loadMarkForm(){
       html+='<tr>';
       html+='<td><b>'+sub.name+'</b></td>';
       html+='<td>'+typeLabel+'</td>';
-      html+='<td colspan="2"><input type="text" id="mark_'+sub.name+'_tot" value="'+(val.tot||'')+'" placeholder="Marks or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='<td colspan="2"><input type="text" id="mark_idx_'+idx+'_tot" value="'+(val.tot||'')+'" placeholder="Marks or AB (blank = skip subject)" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
       html+='</tr>';
     } else {
       let thMax = 80, prMax = 20;
-      let typeLabel = 'Normal';
-      if(sub.type === 'elective_70_30'){ thMax = 70; prMax = 30; typeLabel = 'Elective (70+30)'; }
+      let typeLabel = 'Normal (80+20)';
+      if(sub.type === 'normal_90_10'){ thMax = 90; prMax = 10; typeLabel = 'Normal (90+10)'; }
+      else if(sub.type === 'elective_70_30'){ thMax = 70; prMax = 30; typeLabel = 'Elective (70+30)'; }
       else if(sub.type === 'elective_50_50'){ thMax = 50; prMax = 50; typeLabel = 'Elective (50+50)'; }
       else if(sub.type === 'elective'){ typeLabel = 'Elective (80+20)'; }
       
       html+='<tr>';
       html+='<td><b>'+sub.name+'</b></td>';
       html+='<td>'+typeLabel+'</td>';
-      html+='<td><input type="text" id="mark_'+sub.name+'_th" value="'+(val.th||'')+'" placeholder="Max '+thMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
-      html+='<td><input type="text" id="mark_'+sub.name+'_pr" value="'+(val.pr||'')+'" placeholder="Max '+prMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='<td><input type="text" id="mark_idx_'+idx+'_th" value="'+(val.th||'')+'" placeholder="Max '+thMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
+      html+='<td><input type="text" id="mark_idx_'+idx+'_pr" value="'+(val.pr||'')+'" placeholder="Max '+prMax+' or AB" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px"></td>';
       html+='</tr>';
     }
   });
@@ -502,15 +505,24 @@ function saveMarks(){
     const key=`${c}_${s}_${r}`;
     const marks={};
     
-    (cls.subjects||[]).forEach(sub=>{
+    (cls.subjects||[]).forEach((sub, idx)=>{
       if(sub.type === 'mil' || sub.type === 'nursery' || sub.type === 'elective_single') {
-        const el = document.getElementById('mark_'+sub.name+'_tot');
-        if(el) marks[sub.name] = { tot: el.value };
+        const el = document.getElementById('mark_idx_'+idx+'_tot');
+        if(el) {
+          const v = String(el.value || '').trim();
+          if(v !== '') {
+            marks[sub.name] = { tot: v };
+          }
+        }
       } else {
-        const elTh = document.getElementById('mark_'+sub.name+'_th');
-        const elPr = document.getElementById('mark_'+sub.name+'_pr');
+        const elTh = document.getElementById('mark_idx_'+idx+'_th');
+        const elPr = document.getElementById('mark_idx_'+idx+'_pr');
         if(elTh && elPr) {
-          marks[sub.name] = { th: elTh.value, pr: elPr.value };
+          const thV = String(elTh.value || '').trim();
+          const prV = String(elPr.value || '').trim();
+          if(thV !== '' || prV !== '') {
+            marks[sub.name] = { th: thV, pr: prV };
+          }
         }
       }
     });
@@ -521,7 +533,7 @@ function saveMarks(){
     if(!data.marks) data.marks = {};
     data.marks[key]=marks;
     save();
-    alert('☁️ Marks Saved & Synced to Google Cloud!');
+    alert('☁️ Marks Saved & Synced to Google Cloud!\n\n✅ Blank subjects skipped automatically.');
     updateStats();
   } catch(e) {
     console.error('Save Error:', e);
